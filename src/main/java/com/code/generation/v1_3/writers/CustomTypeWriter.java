@@ -17,6 +17,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CustomTypeWriter extends CodeWriter {
     private static final int INNER_CLASS_INDENT_LEVEL = 1;
@@ -62,12 +63,12 @@ public class CustomTypeWriter extends CodeWriter {
     }
 
     public String getParamsString(Callable callable){
-        StringBuilder stringBuilder = new StringBuilder();
+        /*StringBuilder stringBuilder = new StringBuilder();
         String prefix = "";
         for (Parameter parameter : callable.getParameters()) {
             stringBuilder.append(prefix + ((NormalType) parameter.getType()).getComplexName() + " " + parameter.getName());
             prefix = ", ";
-        }
-        return stringBuilder.toString();
+        }*/
+        return String.join(", ", callable.getParameters().stream().map(aParam -> aParam.toString()).collect(Collectors.toList()));
     }
 }

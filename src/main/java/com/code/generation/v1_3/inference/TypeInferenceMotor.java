@@ -1,5 +1,6 @@
 package com.code.generation.v1_3.inference;
 
+import com.code.generation.v1_3.elements.scope.NormalCallableScope;
 import com.code.generation.v1_3.elements.symbols.Variable;
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.elements.type.Type;
@@ -8,6 +9,7 @@ import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericMe
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Constructor;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Function;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Method;
+import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
 import com.code.generation.v1_3.elements.type.standard.StandardTypable;
 import com.code.generation.v1_3.elements.type.standard.StandardType;
 import com.code.generation.v1_3.elements.type.standard.StandardTypeDirectory;
@@ -26,6 +28,8 @@ import java.util.stream.Collectors;
 
 public class TypeInferenceMotor {
     private StandardTypeDirectory standardTypeDirectory;
+
+    Map<GrammarParser.ExprContext, NormalCallableScope> normalCallableScopes = new IdentityHashMap<>();
 
     private Map<GrammarParser.IdentifierContext, Variable> variables = new IdentityHashMap<>();
     private Map<GrammarParser.ComplexIdContext, Variable> variableParameters = new IdentityHashMap<>();
@@ -190,6 +194,14 @@ public class TypeInferenceMotor {
         if (isDefine) {
             throw new IllegalStateException("can't define standard callable");
         }
+    }
+
+    public void putNormalCallableScope(GrammarParser.ExprContext topDefContext, NormalCallableScope normalCallableScope) {
+        normalCallableScopes.put(topDefContext, normalCallableScope);
+    }
+
+    public Variable getThisVariable(GrammarParser.ExprContext topDefContext) {
+        return normalCallableScopes.get(topDefContext).resolveVariable(StandardKnowledges.THIS_VARIABLE_NAME);
     }
 
     public static class TypableExpression extends Typable {

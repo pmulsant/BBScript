@@ -4,6 +4,10 @@ import com.code.generation.RuntimeCustomException;
 import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericConstructor;
 
 public class WrongParamNumberException extends RuntimeCustomException {
+    public WrongParamNumberException(String msg){
+        super(msg);
+    }
+
     public WrongParamNumberException(int number1, int number2) {
         super(number1 + " vs " + number2);
     }

@@ -285,8 +285,8 @@ public class DeductionListener extends GrammarBaseListener {
 
     /**************************/
 
-    private void manageInstantiation(GrammarParser.ExprContext ctx, GrammarParser.TypeContext typeContext, GrammarParser.ArgsContext argsContext, GrammarParser.RunnableScopeContext runnableScopeContext) {
-        Typable topTypable = typeInferenceMotor.getTypableExpressionFromExpr(ctx, false);
+    private void manageInstantiation(GrammarParser.ExprContext topDefContext, GrammarParser.TypeContext typeContext, GrammarParser.ArgsContext argsContext, GrammarParser.RunnableScopeContext runnableScopeContext) {
+        Typable topTypable = typeInferenceMotor.getTypableExpressionFromExpr(topDefContext, false);
         Type aType = topTypable.getType();
         aType.setName(typeContext);
         Constructor constructor = aType.getConstructor(argsContext.arg().size());
@@ -296,11 +296,12 @@ public class DeductionListener extends GrammarBaseListener {
         typeInferenceMotor.processLinkIfStandardConstructor(topTypable, constructor, isDefined, typeContext);
         if (isDefined) {
             topContext.enterContext(new TopCallableContext(null, constructor));
+            manageThisVariable(topDefContext, topTypable);
         }
     }
 
-    private void manageMethodCall(GrammarParser.ExprContext ctx, GrammarParser.ExprContext innerExprContext, GrammarParser.ComplexIdContext complexIdContext, GrammarParser.ArgsContext argsContext, GrammarParser.RunnableScopeContext runnableScopeContext) {
-        Typable topTypable = typeInferenceMotor.getTypableExpressionFromExpr(ctx, null);
+    private void manageMethodCall(GrammarParser.ExprContext topDefContext, GrammarParser.ExprContext innerExprContext, GrammarParser.ComplexIdContext complexIdContext, GrammarParser.ArgsContext argsContext, GrammarParser.RunnableScopeContext runnableScopeContext) {
+        Typable topTypable = typeInferenceMotor.getTypableExpressionFromExpr(topDefContext, null);
         topTypable.getType().setName(complexIdContext.type());
         Typable innerTypable = typeInferenceMotor.getTypableExpressionFromExpr(innerExprContext, false);
         String methodName = complexIdContext.ID().getText();
@@ -312,7 +313,13 @@ public class DeductionListener extends GrammarBaseListener {
         typeInferenceMotor.processLinkIfStandardMethod(innerTypable, method, isDefined);
         if (isDefined) {
             topContext.enterContext(new TopCallableContext(null, method));
+            manageThisVariable(topDefContext, innerTypable);
         }
+    }
+
+    private void manageThisVariable(GrammarParser.ExprContext topDefContext, Typable innerTypable) {
+        Variable thisVariable = typeInferenceMotor.getThisVariable(topDefContext);
+        typeInferenceMotor.addFusionOfTypesDeclaration(thisVariable, innerTypable);
     }
 
     private void manageFunctionCall(GrammarParser.ExprContext ctx, GrammarParser.ComplexIdContext complexIdContext, GrammarParser.ArgsContext argsContext, GrammarParser.RunnableScopeContext runnableScopeContext) {

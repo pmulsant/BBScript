@@ -3,12 +3,16 @@ package com.code.generation.v1_3.inference.fusion;
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.elements.type.Type;
 import com.code.generation.v1_3.elements.type.custom.Attribute;
+import com.code.generation.v1_3.elements.type.custom.callables.Callable;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.*;
 import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
 import com.code.generation.v1_3.elements.type.standard.StandardType;
 import com.code.generation.v1_3.elements.type.standard.simple_types.NullStandardType;
 import com.code.generation.v1_3.exception.TypeConflictException;
+import com.code.generation.v1_3.exception.WrongParamNumberException;
+import com.code.generation.v1_3.exception.for_callables.WrongArgumentConventionException;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
+import com.code.generation.v1_3.util.Util;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -227,7 +231,7 @@ public class TypeSet {
             methodNames.addAll(type.getMethods().keySet());
         }
         for (String methodName : methodNames) {
-            LinkedList<Method> methods = new LinkedList<>();
+            List<Method> methods = new LinkedList<>();
             for (Type type : types) {
                 Method method = type.getMethodNoCreate(methodName);
                 if (method != null) {
@@ -235,13 +239,21 @@ public class TypeSet {
                 }
             }
             if (!methods.isEmpty()) {
-                Method aNonNullMethod = methods.getFirst();
-                Method newMethod = newType.getMethod(methodName, aNonNullMethod.getParamsNumber());
+                int paramNumbers = fusionParamsNumber(methodName, methods);
+                Method newMethod = newType.getMethod(methodName, paramNumbers);
                 result.addAll(fusionParams(newMethod, methods));
                 result.addAll(fusionCanReturns(newMethod, methods));
             }
         }
         return result;
+    }
+
+    private int fusionParamsNumber(String methodName, List<Method> methods) {
+        Set<Integer> paramsNumbers = methods.stream().map(method -> method.getParamsNumber()).collect(Collectors.toSet());
+        if(paramsNumbers.size() != 1){
+            throw new WrongParamNumberException("more than one params number possibilities for callable " + methodName);
+        }
+        return Util.getOneFromSet(paramsNumbers);
     }
 
     private Collection<? extends FusionDeclaration> fusionConstructors(Type newType) {
@@ -266,7 +278,7 @@ public class TypeSet {
         return result;
     }
 
-    private List<FusionDeclaration> fusionCanReturns(CanReturn newCanReturn, LinkedList<? extends CanReturn> canReturns) {
+    private List<FusionDeclaration> fusionCanReturns(CanReturn newCanReturn, List<? extends CanReturn> canReturns) {
         List<FusionDeclaration> result = new LinkedList<>();
         for (CanReturn canReturn : canReturns) {
             canReturn.assertRightParamsNumber(newCanReturn.getParamsNumber());
@@ -283,10 +295,25 @@ public class TypeSet {
         for (int index = 0; index < callable.getParamsNumber(); index++) {
             int finalIndex = index;
             List<Typable> paramTypables = callables.stream().map(aCallable -> aCallable.getParameter(finalIndex)).collect(Collectors.toList());
-            paramTypables.add(callable.getParameter(finalIndex));
+            Parameter newParameter = callable.getParameter(finalIndex);
+            paramTypables.add(newParameter);
+
+            setNameForParameter(newParameter, finalIndex, callables);
+
             result.add(new FusionDeclaration(typeInferenceMotor, paramTypables));
         }
         return result;
+    }
+
+    private void setNameForParameter(Parameter newParameter, int parameterIndex, List<? extends ISimpleCallable> callables){
+        Set<String> paramNames = callables.stream().map(aCallable -> aCallable.getParameter(parameterIndex).getName()).filter(Objects::nonNull).collect(Collectors.toSet());
+        if(paramNames.size() > 1){
+            throw new WrongArgumentConventionException("more than one name for parameter");
+        }
+        String paramName = Util.getOneFromSet(paramNames);
+        if(paramName != null){
+            newParameter.setName(paramName);
+        }
     }
 
     public void replaceType(Type oldType, Type type) {

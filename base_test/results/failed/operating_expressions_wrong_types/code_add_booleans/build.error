@@ -1,1 +1,1 @@
-com.code.generation.v1_3.exception.NonOperableException: there must be one string
+com.code.generation.v1_3.exception.NonOperableException: there is a non (string or number type) added with a non string type
