@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class TestSaver {
     private static final String PREFIX = "failed/simple_statement/with_instantiation";
-    private static final String CODE_NAME = "instantiation_no_args_no_definition";
+    private static final String CODE_NAME = "instantiation_unamed_argument_with_definition";
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});
         System.out.println("test saved");

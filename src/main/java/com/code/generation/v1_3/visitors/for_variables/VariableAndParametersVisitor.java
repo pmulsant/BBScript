@@ -5,6 +5,7 @@ import com.code.generation.v1_3.elements.symbols.Position;
 import com.code.generation.v1_3.elements.symbols.Variable;
 import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
 import com.code.generation.v1_3.exception.TypeErrorException;
+import com.code.generation.v1_3.exception.for_callables.WrongArgumentConventionException;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.code.generation.v1_3.util.AccessibleTopContext;
 import com.generated.GrammarBaseVisitor;
@@ -199,14 +200,14 @@ public class VariableAndParametersVisitor extends GrammarBaseVisitor<Variable> {
         Set<String> names = new HashSet<>();
         for (GrammarParser.ArgContext argContext : argsContext.arg()) {
             if ((argContext.complexId() == null) != areNull) {
-                throw new IllegalStateException("argument name convention is unrespected");
+                throw new WrongArgumentConventionException("argument name convention is unrespected");
             }
             if (!areNull) {
                 names.add(argContext.complexId().ID().getText());
             }
         }
         if (!areNull && names.size() != argsContext.arg().size()) {
-            throw new IllegalStateException("same argument name");
+            throw new WrongArgumentConventionException("same argument name");
         }
     }
 
