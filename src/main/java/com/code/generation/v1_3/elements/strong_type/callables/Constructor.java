@@ -31,4 +31,9 @@ public class Constructor extends Callable implements LinkedToType {
     public boolean isVoid() {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "constructor " + normalType.getComplexName() + " (" + getParamsString() + ")";
+    }
 }

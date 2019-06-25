@@ -137,4 +137,9 @@ public abstract class NormalType implements CanBeReturnedType, CanBeParameterTyp
     public void addMethod(Method method) {
         methods.put(method.getName(), method);
     }
+
+    @Override
+    public String toString() {
+        return getComplexName();
+    }
 }

@@ -43,4 +43,9 @@ public class Method extends Callable implements NamedCallable, CanReturn, Linked
     public boolean isVoid() {
         return returnedType.isVoid();
     }
+
+    @Override
+    public String toString() {
+        return "method " + returnedType.getComplexName() + " " + normalType.getComplexName() + "." + name + "(" + getParamsString() + ")";
+    }
 }

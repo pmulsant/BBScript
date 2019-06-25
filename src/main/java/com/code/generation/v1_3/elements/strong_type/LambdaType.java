@@ -10,6 +10,7 @@ import com.generated.GrammarParser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LambdaType implements CanBeParameterType {
     private CanBeReturnedType returnedType;
@@ -60,5 +61,11 @@ public class LambdaType implements CanBeParameterType {
     @Override
     public boolean isNull() {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        String paramString = String.join(" , ", parameterTypes.stream().map(normalType -> normalType.getComplexName()).collect(Collectors.toList()));
+        return "(" + paramString + ") -> " + returnedType.getComplexName();
     }
 }

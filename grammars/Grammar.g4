@@ -41,7 +41,7 @@ expr : SUB ? INT # IntExpr
     | lambdaArg '->' lambdaProcess # LambdaExpr
 
     | additionalData '(' expr ')' # EnrichedExpr;
-args : arg (',' arg)*;
+args : arg? (',' arg)*;
 arg : expr ('as' complexId)?;
 type : POW* ID;
 lambdaArg : complexId | '(' complexId (',' complexId)* ')';

@@ -34,4 +34,9 @@ public class VoidType implements StrongType, CanBeReturnedType {
     public String getComplexName() {
         return StandardKnowledges.VOID_TYPE_NAME;
     }
+
+    @Override
+    public String toString() {
+        return getComplexName();
+    }
 }

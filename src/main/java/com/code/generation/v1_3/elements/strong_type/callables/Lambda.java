@@ -29,4 +29,9 @@ public class Lambda extends Callable implements CanReturn {
     public boolean isVoid() {
         return returnedType.isVoid();
     }
+
+    @Override
+    public String toString() {
+        return "lambda (" + getParamsString() + ") -> " + returnedType.getComplexName();
+    }
 }

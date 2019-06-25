@@ -9,6 +9,7 @@ import com.code.generation.v1_3.exception.WrongParamNumberException;
 import com.code.generation.v1_3.visitors.after_deduced.result.RunnableScopeOrStatResult;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Callable implements ICallable {
     protected List<Parameter> parameters;
@@ -56,5 +57,10 @@ public abstract class Callable implements ICallable {
             throw new NotAlwaysReturnException(this);
         }
         checkReturnCompatibility(canAppearInReturnStat);
+    }
+
+    protected String getParamsString() {
+        List<String> params = getParameters().stream().map(aParam -> aParam.toString()).collect(Collectors.toList());
+        return String.join(", ", params);
     }
 }

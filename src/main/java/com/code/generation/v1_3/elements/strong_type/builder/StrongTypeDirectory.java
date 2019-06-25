@@ -1,7 +1,10 @@
 package com.code.generation.v1_3.elements.strong_type.builder;
 
 import com.code.generation.v1_3.elements.strong_type.*;
+import com.code.generation.v1_3.elements.strong_type.callables.Callable;
+import com.code.generation.v1_3.elements.strong_type.callables.Constructor;
 import com.code.generation.v1_3.elements.strong_type.callables.Function;
+import com.code.generation.v1_3.elements.strong_type.callables.Method;
 import com.code.generation.v1_3.elements.strong_type.custom.CustomType;
 import com.code.generation.v1_3.elements.strong_type.custom.Parameter;
 import com.code.generation.v1_3.elements.type.Typable;
@@ -12,6 +15,7 @@ import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
 import com.code.generation.v1_3.elements.type.standard.simple_types.NullStandardType;
 import com.code.generation.v1_3.elements.type.standard.simple_types.VoidStandardType;
 import com.code.generation.v1_3.exception.ConstructorCoherenceException;
+import com.code.generation.v1_3.exception.MissingCallableDefinitionException;
 import com.code.generation.v1_3.exception.WrongTypeFormatException;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.generated.GrammarParser;
@@ -163,5 +167,25 @@ public class StrongTypeDirectory {
 
     public Map<String, CustomType> getCustomTypes() {
         return customTypes;
+    }
+
+    public void check(){
+        for (Function function : functionMap.values()) {
+            assertGotCallableDefinition(function);
+        }
+        for (CustomType customType : customTypes.values()) {
+            for (Constructor constructor : customType.getConstructors().values()) {
+                assertGotCallableDefinition(constructor);
+            }
+            for (Method method : customType.getMethods().values()) {
+                assertGotCallableDefinition(method);
+            }
+        }
+    }
+
+    private void assertGotCallableDefinition(Callable callable){
+        if(callable.getCallableDefinition() == null){
+            throw new MissingCallableDefinitionException(callable);
+        }
     }
 }

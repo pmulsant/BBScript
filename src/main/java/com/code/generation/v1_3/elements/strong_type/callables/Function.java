@@ -5,6 +5,7 @@ import com.code.generation.v1_3.elements.strong_type.CanBeReturnedType;
 import com.code.generation.v1_3.elements.strong_type.custom.Parameter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Function extends Callable implements NamedCallable, CanReturn {
     private String name;
@@ -34,5 +35,10 @@ public class Function extends Callable implements NamedCallable, CanReturn {
     @Override
     public boolean isVoid() {
         return returnedType.isVoid();
+    }
+
+    @Override
+    public String toString() {
+        return "function " + returnedType.getComplexName() + " " + name + "(" + getParamsString() + ")";
     }
 }

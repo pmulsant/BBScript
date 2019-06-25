@@ -15,7 +15,7 @@ public class DownTopMulMathematicalDeductionRule extends NormalRule {
         boolean isThereFloat = false;
         for (Operable operable : operables) {
             if (!operable.isNumber()) {
-                throw new NonOperableException("expected a number");
+                throw new NonOperableException("mul a non number");
             }
             operable.equals(Operable.FLOAT);
             isThereFloat = true;

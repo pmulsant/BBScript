@@ -1,5 +1,6 @@
 package com.code.generation.v1_3.elements.symbols;
 
+import com.code.generation.v1_3.elements.scope.CallableScope;
 import com.code.generation.v1_3.elements.scope.GlobalScope;
 import com.code.generation.v1_3.elements.scope.ProgScope;
 import com.code.generation.v1_3.elements.scope.Scope;
@@ -43,7 +44,7 @@ public class Variable extends Typable {
     }
 
     public void checkInitializationCoherence() {
-        if (isProvided) {
+        if (isProvided || isParameter()) {
             return;
         }
         if (!(scope instanceof GlobalScope) && !firstUse.isWrite()) {
@@ -85,5 +86,9 @@ public class Variable extends Typable {
     @Override
     public String toString() {
         return "variable typable (" + getName() + ", " + getType().toString() + ")";
+    }
+
+    public boolean isParameter(){
+        return scope instanceof CallableScope;
     }
 }

@@ -131,5 +131,6 @@ public class GlobalScope extends BaseScope {
             TypeCheckerVisitor typeCheckerVisitor = new TypeCheckerVisitor(typeInferenceMotor, strongTypeDirectory, resultMap);
             typeCheckerVisitor.visit(code.getProgContext());
         }
+        strongTypeDirectory.check();
     }
 }
