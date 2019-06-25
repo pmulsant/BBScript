@@ -23,4 +23,9 @@ public class Method extends SimpleCallable implements LinkedToType, CanReturn, I
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "method " + name;
+    }
 }

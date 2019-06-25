@@ -7,4 +7,9 @@ public class Constructor extends SimpleCallable implements LinkedToType, IConstr
     public Constructor(TypeInferenceMotor typeInferenceMotor, int paramsNumber) {
         super(typeInferenceMotor, paramsNumber);
     }
+
+    @Override
+    public String toString() {
+        return "constructor (" + getParamsNumber() + " params number";
+    }
 }

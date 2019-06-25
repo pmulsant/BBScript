@@ -7,6 +7,7 @@ import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericMe
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Constructor;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Method;
 import com.code.generation.v1_3.exception.UnConformedStandardTypeException;
+import com.code.generation.v1_3.exception.for_callables.NotStandardCallableForThisTypeException;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 
 import java.util.HashMap;
@@ -74,10 +75,16 @@ public abstract class StandardType extends Type {
         }
         for (Constructor constructor : type.getConstructors().values()) {
             GenericConstructor standardConstructor = genericConstructorMap.get(constructor.getParamsNumber());
+            if(standardConstructor == null){
+                throw new NotStandardCallableForThisTypeException(this, constructor);
+            }
             standardConstructor.checkIsRespectedByConstructor(constructor);
         }
         for (Method method : type.getMethods().values()) {
             GenericMethod standardMethod = genericMethodMap.get(method.getName());
+            if(standardMethod == null){
+                throw new NotStandardCallableForThisTypeException(this, method);
+            }
             standardMethod.checkIsRespectedByMethod(method);
         }
     }

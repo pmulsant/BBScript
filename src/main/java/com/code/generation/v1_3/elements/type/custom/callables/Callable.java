@@ -2,7 +2,7 @@ package com.code.generation.v1_3.elements.type.custom.callables;
 
 import com.code.generation.v1_3.exception.WrongParamNumberException;
 
-public class Callable implements ICallable {
+public abstract class Callable implements ICallable {
     private int paramsNumber;
 
     public Callable(int paramsNumber) {
