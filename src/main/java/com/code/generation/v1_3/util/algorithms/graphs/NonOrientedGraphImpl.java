@@ -38,4 +38,16 @@ public class NonOrientedGraphImpl<Node> implements INonOrientedGraph<Node> {
     public Set<Set<Node>> getNodeGroups() {
         return nodeGroups;
     }
+
+    @Override
+    public boolean contains(Node node, boolean compareWithEquals) {
+        for (Set<Node> nodeGroup : nodeGroups) {
+            for (Node aNode : nodeGroup) {
+                if(aNode == node || (compareWithEquals && aNode.equals(node))){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

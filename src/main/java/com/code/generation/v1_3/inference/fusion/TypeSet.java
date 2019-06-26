@@ -3,7 +3,6 @@ package com.code.generation.v1_3.inference.fusion;
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.elements.type.Type;
 import com.code.generation.v1_3.elements.type.custom.Attribute;
-import com.code.generation.v1_3.elements.type.custom.callables.Callable;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.*;
 import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
 import com.code.generation.v1_3.elements.type.standard.StandardType;
@@ -24,21 +23,16 @@ public class TypeSet {
 
     public TypeSet(TypeInferenceMotor typeInferenceMotor, Type type) {
         this.typeInferenceMotor = typeInferenceMotor;
-        addType(type);
+        types.add(type);
     }
 
     public TypeSet(TypeInferenceMotor typeInferenceMotor, Set<TypeSet> typeSets) {
         this.typeInferenceMotor = typeInferenceMotor;
         for (TypeSet typeSet : typeSets) {
             for (Type type : typeSet.types) {
-                addType(type);
+                types.add(type);
             }
         }
-    }
-
-    public void addType(Type type) {
-        types.add(type);
-        type.setTypeSet(this);
     }
 
     public List<FusionDeclaration> fusionAndClean() {
@@ -197,7 +191,9 @@ public class TypeSet {
         }
         if (isList) {
             newType.setList();
-            return new FusionDeclaration(typeInferenceMotor, types.stream().map(type -> type.getInnerTypable()).filter(Objects::nonNull).collect(Collectors.toList()));
+            List<Typable> innerTypables = types.stream().map(type -> type.getInnerTypable()).filter(Objects::nonNull).collect(Collectors.toList());
+            innerTypables.add(newType.getInnerTypable());
+            return new FusionDeclaration(typeInferenceMotor, innerTypables);
         }
         return null;
     }
@@ -331,6 +327,10 @@ public class TypeSet {
     public void replaceType(Type oldType, Type newType) {
         types.remove(oldType);
         types.add(newType);
+    }
+
+    public Set<Type> getTypes() {
+        return types;
     }
 
     @Override

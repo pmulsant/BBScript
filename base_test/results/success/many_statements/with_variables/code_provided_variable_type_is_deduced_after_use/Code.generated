@@ -1,0 +1,6 @@
+int a;
+int $provided;
+a = $provided;
+int $otherProvided;
+$provided = $otherProvided;
+a = 2;

@@ -8,4 +8,6 @@ public interface INonOrientedGraph<Node> {
     }
     void addNodeGroup(Set<Node> nodes);
     Set<Set<Node>> getNodeGroups();
+
+    boolean contains(Node node, boolean compareWithEquals);
 }

@@ -1,0 +1,2 @@
+a = $provided;
+b = $provided.length();

@@ -1,6 +1,7 @@
 package com.code.generation.v1_3.inference.fusion;
 
 import com.code.generation.v1_3.elements.type.Typable;
+import com.code.generation.v1_3.elements.type.Type;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.code.generation.v1_3.util.Util;
 
@@ -34,7 +35,9 @@ public class FusionDeclaration {
         if (typeSets.size() == 1) {
             return Util.getOneFromSet(typeSets);
         }
-        return new TypeSet(typeInferenceMotor, typeSets);
+        TypeSet newTypeSet = new TypeSet(typeInferenceMotor, typeSets);
+        newTypeSet.getTypes().forEach(type -> type.setTypeSet(newTypeSet));
+        return newTypeSet;
     }
 
     @Override

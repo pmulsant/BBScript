@@ -13,10 +13,7 @@ import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.code.generation.v1_3.inference.fusion.TypeSet;
 import com.generated.GrammarParser;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Type {
     private boolean isDeducedAndCoherent = false;
@@ -47,9 +44,9 @@ public class Type {
         typeSet = new TypeSet(typeInferenceMotor, this);
     }
 
-    public Type(TypeInferenceMotor typeInferenceMotor, TypeSet typeSet) {
+    public Type(TypeInferenceMotor typeInferenceMotor, TypeSet typeSets) {
         this.typeInferenceMotor = typeInferenceMotor;
-        this.typeSet = typeSet;
+        this.typeSet = typeSets;
     }
 
 
@@ -293,5 +290,9 @@ public class Type {
             return 0;
         }
         return simpleName.hashCode();
+    }
+
+    public List<Typable> getTypables() {
+        return typables;
     }
 }

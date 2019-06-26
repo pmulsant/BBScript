@@ -1,0 +1,3 @@
+a = $provided;
+$provided = $otherProvided;
+a = 2;

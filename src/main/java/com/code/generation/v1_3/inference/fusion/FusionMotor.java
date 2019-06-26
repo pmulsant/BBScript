@@ -37,10 +37,10 @@ public class FusionMotor {
     }
 
     public List<FusionDeclaration> fusion(List<FusionDeclaration> declarations) {
-        declarations = simplifyDeclarationsIntoDistinctDeclarations(declarations);
+        List<FusionDeclaration> reducedList = simplifyDeclarationsIntoDistinctDeclarations(declarations);
         List<FusionDeclaration> result = new LinkedList<>();
         Set<TypeSet> typeSets = new HashSet<>();
-        for (FusionDeclaration declaration : declarations) {
+        for (FusionDeclaration declaration : reducedList) {
             TypeSet typeSet = declaration.fusionTypeSets();
             typeSet.checkTypeSetOfTypesCoherence();
             typeSets.add(typeSet);
@@ -52,12 +52,53 @@ public class FusionMotor {
     }
 
     private List<FusionDeclaration> simplifyDeclarationsIntoDistinctDeclarations(List<FusionDeclaration> declarations) {
+        Set<FusionDeclaration> reduced = new HashSet<>(declarations);
+        int previousSize;
+        do {
+            previousSize = reduced.size();
+            reduced = reduce(reduced);
+            if(reduced.size() > previousSize){
+                throw new IllegalStateException();
+            }
+        } while (reduced.size() != previousSize);
+        return new ArrayList<>(reduced);
+    }
+
+    private Set<FusionDeclaration> reduce(Set<FusionDeclaration> reduced) {
+        INonOrientedGraph<Typable> graph = reduceWithFusionDeclarations(reduced);
+        reduceWithTypeSets(graph);
+        return graph.getNodeGroups().stream().map(group -> new FusionDeclaration(typeInferenceMotor, new ArrayList<>(group)))
+                .collect(Collectors.toSet());
+    }
+
+    private INonOrientedGraph<Typable> reduceWithFusionDeclarations(Set<FusionDeclaration> reduced) {
         INonOrientedGraph<Typable> graph = INonOrientedGraph.instance();
-        declarations.forEach(declaration -> graph.addNodeGroup(new HashSet<>(declaration.getTypables())));
-        Set<Set<Typable>> nodeGroups = graph.getNodeGroups();
-        List<FusionDeclaration> newDeclarations = new ArrayList<>(nodeGroups.size());
-        nodeGroups.forEach(group -> newDeclarations.add(new FusionDeclaration(typeInferenceMotor, new ArrayList<>(group))));
-        return newDeclarations;
+        reduced.forEach(declaration -> {
+            graph.addNodeGroup(new HashSet<>(declaration.getTypables()));
+        });
+        return graph;
+    }
+
+    private void reduceWithTypeSets(INonOrientedGraph<Typable> graph) {
+        Set<Set<Typable>> nodeGroups = new HashSet<>(graph.getNodeGroups());
+        nodeGroups.forEach(group -> {
+            group.forEach(typable -> {
+                TypeSet typeSet = typable.getType().getTypeSet();
+                graph.addNodeGroup(getTypablesAlreadyInGraph(graph, typeSet));
+            });
+        });
+    }
+
+    private Set<Typable> getTypablesAlreadyInGraph(INonOrientedGraph<Typable> graph, TypeSet typeSet) {
+        Set<Typable> result = new HashSet<>();
+        typeSet.getTypes().forEach(type -> {
+            type.getTypables().forEach(typable -> {
+                if(graph.contains(typable, false)){
+                    result.add(typable);
+                }
+            });
+        });
+        return result;
     }
 
     private List<FusionDeclaration> cleanFusionDeclarationWithOneElement(List<FusionDeclaration> fusionDeclarations) {
