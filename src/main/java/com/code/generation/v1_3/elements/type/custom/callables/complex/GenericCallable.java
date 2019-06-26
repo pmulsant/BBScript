@@ -21,7 +21,6 @@ public abstract class GenericCallable extends Callable implements IGenericCallab
         this.standardTypeDirectory = standardTypeDirectory;
         this.typeInferenceMotor = typeInferenceMotor;
         this.standardTypeParameters = standardTypeParameters;
-        register();
     }
 
     protected abstract void register();

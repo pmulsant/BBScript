@@ -31,7 +31,7 @@ public class GetByIndexGenericMethod extends GenericMethod {
     @Override
     public Method makeStrongMethod(NormalType innerNormalType, CanBeReturnedType returned, List<CanBeProvideForParameter> arguments) {
         StrongTypeDirectory strongTypeDirectory = innerNormalType.getStrongTypeDirectory();
-        CustomType intType = strongTypeDirectory.getStrongType(Operable.STRING);
+        CustomType intType = strongTypeDirectory.getStrongType(Operable.INT);
         Parameter parameter = new Parameter(null, intType);
         NormalType innerListType = ((ListType) innerNormalType).getInnerType();
         return new Method(innerNormalType.getStrongTypeDirectory(), innerNormalType, getName(), innerListType, Collections.singletonList(parameter));

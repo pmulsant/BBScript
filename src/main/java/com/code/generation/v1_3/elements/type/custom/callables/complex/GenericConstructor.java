@@ -19,6 +19,7 @@ public abstract class GenericConstructor extends GenericCallable implements ICon
     public GenericConstructor(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor, StandardType innerStandardType, List<StandardType> standardTypeParameters) {
         super(standardTypeDirectory, typeInferenceMotor, standardTypeParameters);
         this.innerStandardType = innerStandardType;
+        register();
     }
 
     @Override

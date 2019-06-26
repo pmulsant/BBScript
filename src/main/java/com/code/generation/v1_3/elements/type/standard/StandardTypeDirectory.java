@@ -6,7 +6,7 @@ import com.code.generation.v1_3.elements.type.standard.callables.EqualsMethod;
 import com.code.generation.v1_3.elements.type.standard.callables.for_lists.constructors.CopyListGenericConstructor;
 import com.code.generation.v1_3.elements.type.standard.callables.for_lists.constructors.EmptyListGenericConstructor;
 import com.code.generation.v1_3.elements.type.standard.callables.for_lists.methods.*;
-import com.code.generation.v1_3.elements.type.standard.callables.functions.StandardFunction;
+import com.code.generation.v1_3.elements.type.standard.callables.functions.*;
 import com.code.generation.v1_3.elements.type.standard.simple_types.*;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.generated.GrammarParser;
@@ -27,6 +27,7 @@ public class StandardTypeDirectory {
         this.typeInferenceMotor = typeInferenceMotor;
         addStandardTypes();
         addListElements();
+        addStandardFunctions();
         buildSimpleStandardTypes();
     }
 
@@ -43,19 +44,28 @@ public class StandardTypeDirectory {
     }
 
     private void addListElements() {
-        register(new CopyListGenericConstructor(this, typeInferenceMotor));
-        register(new EmptyListGenericConstructor(this, typeInferenceMotor));
+        new CopyListGenericConstructor(this, typeInferenceMotor);
+        new EmptyListGenericConstructor(this, typeInferenceMotor);
 
-        register(new SizeGenericMethod(this, typeInferenceMotor));
-        register(new AddGenericMethod(this, typeInferenceMotor));
-        register(new GetByIndexGenericMethod(this, typeInferenceMotor));
-        register(new RemoveByIndexGenericMethod(this, typeInferenceMotor));
+        new SizeGenericMethod(this, typeInferenceMotor);
+        new AddGenericMethod(this, typeInferenceMotor);
+        new GetByIndexGenericMethod(this, typeInferenceMotor);
+        new RemoveByIndexGenericMethod(this, typeInferenceMotor);
 
-        register(new MapGenericMethod(this, typeInferenceMotor));
-        register(new FilterGenericMethod(this, typeInferenceMotor));
+        new MapGenericMethod(this, typeInferenceMotor);
+        new FilterGenericMethod(this, typeInferenceMotor);
 
-        register(new EqualsMethod(this, typeInferenceMotor));
+        new EqualsMethod(this, typeInferenceMotor);
     }
+
+    private void addStandardFunctions() {
+        new HashFunction(this, typeInferenceMotor);
+        new FloatToIntFunction(this, typeInferenceMotor);
+        new IntToFloatFunction(this, typeInferenceMotor);
+        new ParseIntFunction(this, typeInferenceMotor);
+        new ParseFloatFunction(this, typeInferenceMotor);
+    }
+
 
     private void buildSimpleStandardTypes() {
         for (StandardType standardType : standardTypeMap.values()) {

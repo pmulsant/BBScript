@@ -128,7 +128,9 @@ public class TypeInferenceMotor {
         Function function = functions.get(functionName);
         if (function == null) {
             function = new Function(this, functionName, paramsNumber);
-            functions.put(functionName, function);
+            if(standardTypeDirectory.getStandardFunction(functionName) == null) {
+                functions.put(functionName, function);
+            }
         }
         function.assertRightParamsNumber(paramsNumber);
         return function;

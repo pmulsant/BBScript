@@ -22,6 +22,7 @@ public abstract class StandardFunction extends GenericCallable {
         super(standardTypeDirectory, typeInferenceMotor, standardTypeParameters);
         this.name = name;
         this.standardReturnedType = standardReturnedType;
+        register();
     }
 
     @Override

@@ -22,6 +22,7 @@ public abstract class GenericMethod extends GenericCallable implements IMethod {
         this.standardInnerType = standardInnerType;
         this.standardReturnedType = standardReturnedType;
         this.name = name;
+        register();
     }
 
     @Override
