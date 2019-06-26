@@ -18,7 +18,7 @@ public class ScopeData {
         return statIndex;
     }
 
-    public void setStatIndex(Integer statIndex) {
+    public void setStatIndex(int statIndex) {
         this.statIndex = statIndex;
     }
 }

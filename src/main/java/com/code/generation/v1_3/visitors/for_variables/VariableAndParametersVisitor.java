@@ -15,7 +15,6 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class VariableAndParametersVisitor extends GrammarBaseVisitor<Variable> {
@@ -78,9 +77,10 @@ public class VariableAndParametersVisitor extends GrammarBaseVisitor<Variable> {
 
     @Override
     public Variable visitInstantiationCallAndDef(GrammarParser.InstantiationCallAndDefContext ctx) {
+        manageArgumentExpressionsBeforeChangingScope(null, ctx.args());
         NormalCallableScope normalCallableScope = createNormalCallableScope(ctx, ctx.args(), true);
         scopeDataContext.enterContext(new ScopeData(normalCallableScope));
-        Variable result = super.visitInstantiationCallAndDef(ctx);
+        Variable result = visit(ctx.runnableScope());
         scopeDataContext.exitContext();
         return result;
     }
@@ -93,8 +93,9 @@ public class VariableAndParametersVisitor extends GrammarBaseVisitor<Variable> {
 
     @Override
     public Variable visitMethodCallAndDef(GrammarParser.MethodCallAndDefContext ctx) {
+        manageArgumentExpressionsBeforeChangingScope(ctx.expr(), ctx.args());
         scopeDataContext.enterContext(new ScopeData(createNormalCallableScope(ctx, ctx.args(), true)));
-        Variable result = super.visitMethodCallAndDef(ctx);
+        Variable result = visit(ctx.runnableScope());
         scopeDataContext.exitContext();
         return result;
     }
@@ -107,8 +108,9 @@ public class VariableAndParametersVisitor extends GrammarBaseVisitor<Variable> {
 
     @Override
     public Variable visitFunctionCallAndDef(GrammarParser.FunctionCallAndDefContext ctx) {
+        manageArgumentExpressionsBeforeChangingScope(null, ctx.args());
         scopeDataContext.enterContext(new ScopeData(createNormalCallableScope(ctx, ctx.args(), false)));
-        Variable result = super.visitFunctionCallAndDef(ctx);
+        Variable result = visit(ctx.runnableScope());
         scopeDataContext.exitContext();
         return result;
     }
@@ -160,6 +162,8 @@ public class VariableAndParametersVisitor extends GrammarBaseVisitor<Variable> {
         return variable;
     }
 
+    /**********************/
+
     private Variable manageVisitIsStat(GrammarParser.StatContext ctx){
         Integer statIndex = scopeDataContext.getCurrentContext().getStatIndex();
         statIndex = (statIndex == null ? 0 : statIndex + 1);
@@ -175,7 +179,16 @@ public class VariableAndParametersVisitor extends GrammarBaseVisitor<Variable> {
         return visit(child);
     }
 
-    public NormalCallableScope createNormalCallableScope(GrammarParser.ExprContext topDefContext, GrammarParser.ArgsContext argsContext, boolean addThis) {
+    private void manageArgumentExpressionsBeforeChangingScope(GrammarParser.ExprContext innerExprCtx, GrammarParser.ArgsContext argsContext){
+        if(innerExprCtx != null){
+            visit(innerExprCtx);
+        }
+        for (GrammarParser.ArgContext argContext : argsContext.arg()) {
+            visit(argContext.expr());
+        }
+    }
+
+    private NormalCallableScope createNormalCallableScope(GrammarParser.ExprContext topDefContext, GrammarParser.ArgsContext argsContext, boolean addThis) {
         checkArgNames(argsContext, false);
         NormalCallableScope normalCallableScope = new NormalCallableScope(globalScope);
         argsContext.arg().forEach(argContext -> {
