@@ -8,8 +8,8 @@ import com.code.generation.tests.run.BaseTestModifier;
 import java.io.IOException;
 
 public class TestSaver {
-    private static final String PREFIX = "success/simple_statement/with_function";
-    private static final String CODE_NAME = "call_void_function_no_parameters";
+    private static final String PREFIX = "success/simple_statement/init_variable_expressions/typed_variables";
+    private static final String CODE_NAME = "int_initialization";
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});
         System.out.println("test saved");

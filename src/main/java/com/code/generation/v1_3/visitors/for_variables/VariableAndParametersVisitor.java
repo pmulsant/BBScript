@@ -144,7 +144,7 @@ public class VariableAndParametersVisitor extends GrammarBaseVisitor<Variable> {
 
     @Override
     public Variable visitIdentifier(GrammarParser.IdentifierContext ctx) {
-        String variableName = ctx.complexId().getText();
+        String variableName = ctx.complexId().ID().getText();
         if(variableName.equals(StandardKnowledges.VOID_TYPE_NAME)){
             throw new TypeErrorException("variable name can't be void");
         }
@@ -192,7 +192,7 @@ public class VariableAndParametersVisitor extends GrammarBaseVisitor<Variable> {
         checkArgNames(argsContext, false);
         NormalCallableScope normalCallableScope = new NormalCallableScope(globalScope);
         argsContext.arg().forEach(argContext -> {
-            String name = argContext.complexId().getText();
+            String name = argContext.complexId().ID().getText();
             normalCallableScope.defineVariable(typeInferenceMotor, name, new Position(argContext.complexId(), normalCallableScope, -1));
         });
         if (addThis) {
@@ -205,7 +205,7 @@ public class VariableAndParametersVisitor extends GrammarBaseVisitor<Variable> {
     private Scope createCallableScopeForLambda(GrammarParser.LambdaArgContext lambdaArgContext) {
         LambdaScope lambdaScope = new LambdaScope(scopeDataContext.getCurrentContext().getScope());
         lambdaArgContext.complexId().forEach(complexIdContext -> {
-            String name = complexIdContext.getText();
+            String name = complexIdContext.ID().getText();
             lambdaScope.defineVariable(typeInferenceMotor, name, new Position(complexIdContext, lambdaScope, -1));
         });
         return lambdaScope;

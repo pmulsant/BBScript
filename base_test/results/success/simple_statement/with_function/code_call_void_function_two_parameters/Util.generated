@@ -1,0 +1,3 @@
+function void myFunction (int a, float b) {
+}
+
