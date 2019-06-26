@@ -2,6 +2,7 @@ package com.code.generation.v1_3.inference.fusion;
 
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
+import com.code.generation.v1_3.util.Util;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,9 +32,7 @@ public class FusionDeclaration {
     public TypeSet fusionTypeSets() {
         Set<TypeSet> typeSets = typables.stream().map(typable -> typable.getType().getTypeSet()).collect(Collectors.toSet());
         if (typeSets.size() == 1) {
-            for (TypeSet typeSet : typeSets) {
-                return typeSet;
-            }
+            return Util.getOneFromSet(typeSets);
         }
         return new TypeSet(typeInferenceMotor, typeSets);
     }

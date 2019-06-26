@@ -103,13 +103,13 @@ public class DeductionListener extends GrammarBaseListener {
 
     @Override
     public void enterAttributeCall(GrammarParser.AttributeCallContext ctx) {
-        Typable typable = typeInferenceMotor.getTypableExpressionFromExpr(ctx, false);
+        Typable topTypable = typeInferenceMotor.getTypableExpressionFromExpr(ctx, false);
         Type innerType = typeInferenceMotor.getTypableExpressionFromExpr(ctx.expr(), false).getType();
         if (ctx.complexId().type() != null) {
             innerType.setName(ctx.complexId().type());
         }
         Attribute attribute = innerType.getAttribute(ctx.complexId().ID().getText(), ctx.STRONG_LINK_OP() != null);
-        typeInferenceMotor.addFusionOfTypesDeclaration(typable, attribute);
+        typeInferenceMotor.addFusionOfTypesDeclaration(topTypable, attribute);
     }
 
     @Override

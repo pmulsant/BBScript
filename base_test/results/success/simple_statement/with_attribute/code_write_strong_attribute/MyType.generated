@@ -1,0 +1,7 @@
+class MyType {
+	(strong) int myAttribute;
+	
+	MyType() {
+	}
+	
+}

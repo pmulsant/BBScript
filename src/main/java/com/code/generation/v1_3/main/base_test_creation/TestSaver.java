@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class TestSaver {
     private static final String PREFIX = "success/simple_statement/with_attribute";
-    private static final String CODE_NAME = "read_attribute_outside_the_class";
+    private static final String CODE_NAME = "write_strong_attribute";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});

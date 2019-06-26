@@ -2,6 +2,7 @@ package com.code.generation.v1_3.inference.fusion;
 
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
+import com.code.generation.v1_3.util.algorithms.graphs.INonOrientedGraph;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,16 +36,28 @@ public class FusionMotor {
         }
     }
 
-    public List<FusionDeclaration> fusion(List<FusionDeclaration> fusionDeclarations) {
+    public List<FusionDeclaration> fusion(List<FusionDeclaration> declarations) {
+        declarations = simplifyDeclarationsIntoDistinctDeclarations(declarations);
         List<FusionDeclaration> result = new LinkedList<>();
         Set<TypeSet> typeSets = new HashSet<>();
-        for (FusionDeclaration fusionDeclaration : fusionDeclarations) {
-            typeSets.add(fusionDeclaration.fusionTypeSets());
+        for (FusionDeclaration declaration : declarations) {
+            TypeSet typeSet = declaration.fusionTypeSets();
+            typeSet.checkTypeSetOfTypesCoherence();
+            typeSets.add(typeSet);
         }
         for (TypeSet typeSet : typeSets) {
             result.addAll(typeSet.fusionAndClean());
         }
         return cleanFusionDeclarationWithOneElement(result);
+    }
+
+    private List<FusionDeclaration> simplifyDeclarationsIntoDistinctDeclarations(List<FusionDeclaration> declarations) {
+        INonOrientedGraph<Typable> graph = INonOrientedGraph.instance();
+        declarations.forEach(declaration -> graph.addNodeGroup(new HashSet<>(declaration.getTypables())));
+        Set<Set<Typable>> nodeGroups = graph.getNodeGroups();
+        List<FusionDeclaration> newDeclarations = new ArrayList<>(nodeGroups.size());
+        nodeGroups.forEach(group -> newDeclarations.add(new FusionDeclaration(typeInferenceMotor, new ArrayList<>(group))));
+        return newDeclarations;
     }
 
     private List<FusionDeclaration> cleanFusionDeclarationWithOneElement(List<FusionDeclaration> fusionDeclarations) {

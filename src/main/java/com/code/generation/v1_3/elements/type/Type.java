@@ -39,12 +39,17 @@ public class Type {
 
     public Type(TypeInferenceMotor typeInferenceMotor, Typable typable) {
         this(typeInferenceMotor);
-        typables.add(typable);
+        addTypable(typable);
     }
 
     public Type(TypeInferenceMotor typeInferenceMotor) {
         this.typeInferenceMotor = typeInferenceMotor;
         typeSet = new TypeSet(typeInferenceMotor, this);
+    }
+
+    public Type(TypeInferenceMotor typeInferenceMotor, TypeSet typeSet) {
+        this.typeInferenceMotor = typeInferenceMotor;
+        this.typeSet = typeSet;
     }
 
 
@@ -179,19 +184,19 @@ public class Type {
         return typeSet;
     }
 
-    public void setTypeSet(TypeSet typeSet) {
-        this.typeSet = typeSet;
+    public void setTypeSet(TypeSet newTypeSet) {
+        this.typeSet = newTypeSet;
     }
 
     public boolean canBeReplaced() {
         return true;
     }
 
-    public void replaceBy(Type type) {
+    public void replaceBy(Type newType) {
         for (Typable typable : typables) {
-            typable.setType(type);
+            typable.setType(newType);
         }
-        typeSet.replaceType(this, type);
+        typeSet.replaceType(this, newType);
     }
 
     public void addTypable(Typable typable) {
@@ -274,6 +279,12 @@ public class Type {
     @Override
     public String toString() {
         return "type : " + (simpleName != null ? (simpleName.equals(StandardKnowledges.NULL_KEY_WORD) ? "the null type" : simpleName) : "unknown");
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean result = super.equals(obj);
+        return result;
     }
 
     @Override

@@ -10,17 +10,17 @@ public class BaseTestModifierCaller {
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         //BaseTestModifier.main(new String[]{"all"});
         //BaseTestModifier.main(new String[]{"rebuild", "failed"});
-        /*BaseTestModifier.main(new String[]{
+        BaseTestModifier.main(new String[]{
                 "rebuild",
 
-                "failed/operating_expressions_wrong_types",
-                "or_with_float"});*/
-        BaseTestModifier.main(new String[]{"replace",
+                "success/simple_statement/with_method",
+                "method_with_variable_define_in_argument_same_name"});
+        /*BaseTestModifier.main(new String[]{"replace",
 
                 "success/simple_statement/variable_errors/typed_variables",
                 "regex_initialization_with_int",
 
                 "failed/simple_statement/variable_errors/typed_variables",
-                "regex_initialization_with_int"});
+                "regex_initialization_with_int"});*/
     }
 }

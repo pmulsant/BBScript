@@ -42,6 +42,7 @@ public class TypeSet {
     }
 
     public List<FusionDeclaration> fusionAndClean() {
+        checkTypeSetOfTypesCoherence();
         if (types.size() <= 1) {
             return Collections.emptyList();
         }
@@ -54,6 +55,14 @@ public class TypeSet {
         List<FusionDeclaration> fusionDeclarations = new LinkedList<>();
         cleanTypeSetWithNewType(fusion(fusionDeclarations));
         return fusionDeclarations;
+    }
+
+    public void checkTypeSetOfTypesCoherence() {
+        for (Type type : types) {
+            if(type.getTypeSet() != this){
+                throw new IllegalStateException();
+            }
+        }
     }
 
     private StandardType getNonNullStandardType() {
@@ -80,7 +89,7 @@ public class TypeSet {
     }
 
     private Type fusion(List<FusionDeclaration> fusionDeclarations) {
-        Type newType = new Type(typeInferenceMotor);
+        Type newType = new Type(typeInferenceMotor, this);
         fusionName(newType);
         fusionVoid(newType);
 
@@ -107,6 +116,9 @@ public class TypeSet {
             if(oldType.canBeReplaced()) {
                 oldType.replaceBy(newType);
             }
+        }
+        if(types.size() != 1){
+            throw new IllegalStateException();
         }
     }
 
@@ -316,9 +328,9 @@ public class TypeSet {
         }
     }
 
-    public void replaceType(Type oldType, Type type) {
+    public void replaceType(Type oldType, Type newType) {
         types.remove(oldType);
-        types.add(type);
+        types.add(newType);
     }
 
     @Override
