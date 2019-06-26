@@ -1,0 +1,1 @@
+new MyType(){}.myMethod((a = 1) as b){};
