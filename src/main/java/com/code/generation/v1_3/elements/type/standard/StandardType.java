@@ -74,7 +74,7 @@ public abstract class StandardType extends Type {
         if (type.isList()) {
             throw new UnConformedStandardTypeException(this, type);
         }
-        if (type.isVoid() != null && type.isVoid() != isVoid) {
+        if ((type.isVoid() != null) && (type.isVoid() != isVoid)) {
             throw new UnConformedStandardTypeException(this, type);
         }
         if (type.getSimpleName() != null && !type.getSimpleName().equals(simpleName)) {
