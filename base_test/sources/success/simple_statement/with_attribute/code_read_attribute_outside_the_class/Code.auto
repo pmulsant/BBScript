@@ -1,0 +1,1 @@
+(new MyType(){}).myAttribute + ((new MyType()).myAttribute = 5);

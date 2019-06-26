@@ -28,6 +28,6 @@ public class Attribute implements Assignable {
 
     @Override
     public String toDefinitionStatementString() {
-        return (isStrong ? "(strong) " : "") + normalType.getComplexName() + " " + name;
+        return (isStrong ? "(strong) " : "") + normalType.getComplexName() + " " + name + ";";
     }
 }

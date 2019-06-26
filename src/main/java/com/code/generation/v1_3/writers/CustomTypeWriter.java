@@ -35,6 +35,9 @@ public class CustomTypeWriter extends CodeWriter {
         for (Attribute attribute : customType.getAttributes().values()) {
             writeLine(attribute.toDefinitionStatementString(), INNER_CLASS_INDENT_LEVEL);
         }
+        if(!customType.getAttributes().isEmpty()) {
+            writeLine("", INNER_CLASS_INDENT_LEVEL);
+        }
         for (Constructor constructor : customType.getConstructors().values()) {
             writeConstructor(constructor);
         }

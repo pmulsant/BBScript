@@ -41,4 +41,9 @@ public abstract class Rule {
     }
 
     protected abstract List<Operable> getResult();
+
+    @Override
+    public int hashCode() {
+        return parameterTypables.size() + targetTypables.size();
+    }
 }
