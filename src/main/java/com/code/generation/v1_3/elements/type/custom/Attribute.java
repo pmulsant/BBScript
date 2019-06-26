@@ -24,4 +24,9 @@ public class Attribute extends Typable {
     public boolean isStrong() {
         return isStrong;
     }
+
+    @Override
+    public String toString() {
+        return "attribute : " + getType();
+    }
 }

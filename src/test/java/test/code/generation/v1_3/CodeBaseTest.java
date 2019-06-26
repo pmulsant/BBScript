@@ -18,7 +18,7 @@ import java.util.LinkedList;
 
 public class CodeBaseTest {
     @BeforeAll
-    public static void removeTempFolder() throws IOException {
+    public static void removeTempFolder() {
         org.junit.Assume.assumeTrue(TestRunner.wantContinue());
         BaseTestFolderOrganization.removeTempFolders();
     }

@@ -126,6 +126,14 @@ public class DeductionListener extends GrammarBaseListener {
 
     @Override
     public void exitMethodCallAndDef(GrammarParser.MethodCallAndDefContext ctx) {
+        TopCallableContext currentContext = topContext.getCurrentContext();
+        if(!currentContext.isReturn()){
+            ISimpleCallable callable = currentContext.getCallable();
+            if(callable instanceof CanReturn){
+                Typable returned = ((CanReturn) callable).getReturnedTypable();
+                typeInferenceMotor.addFusionOfTypesDeclaration(returned, typeInferenceMotor.getStandardTypable(StandardKnowledges.VOID_TYPE_NAME));
+            }
+        }
         topContext.exitContext();
     }
 
@@ -355,10 +363,12 @@ public class DeductionListener extends GrammarBaseListener {
     }
 
     private void manageReturnProcess(GrammarParser.ExprContext exprContext) {
-        if (topContext.getCurrentContext() == null) {
+        TopCallableContext currentContext = topContext.getCurrentContext();
+        currentContext.setReturn();
+        if (currentContext == null) {
             throw new UnexpectedReturnStatException("not in callable");
         }
-        ICallable currentCallable = topContext.getCurrentContext().getCallable();
+        ICallable currentCallable = currentContext.getCallable();
         if (exprContext != null) {
             Typable returnedTypableObject = typeInferenceMotor.getTypableExpressionFromExpr(exprContext,
                     currentCallable instanceof Lambda ? null : false);

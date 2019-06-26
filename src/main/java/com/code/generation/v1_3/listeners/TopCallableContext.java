@@ -6,6 +6,7 @@ import com.code.generation.v1_3.elements.type.custom.callables.simples.ISimpleCa
 public class TopCallableContext {
     private Typable innerTypable;
     private ISimpleCallable callable;
+    private boolean isReturn;
 
     public TopCallableContext(ISimpleCallable callable) {
         this(null, callable);
@@ -22,5 +23,13 @@ public class TopCallableContext {
 
     public ISimpleCallable getCallable() {
         return callable;
+    }
+
+    public void setReturn() {
+        isReturn = true;
+    }
+
+    public boolean isReturn() {
+        return isReturn;
     }
 }

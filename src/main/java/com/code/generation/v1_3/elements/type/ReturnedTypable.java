@@ -7,4 +7,9 @@ public class ReturnedTypable extends Typable {
         super(typeInferenceMotor);
         initialize();
     }
+
+    @Override
+    public String toString() {
+        return "returned : " + getType();
+    }
 }

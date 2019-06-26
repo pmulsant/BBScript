@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class TestSaver {
     private static final String PREFIX = "success/simple_statement/with_method";
-    private static final String CODE_NAME = "method_length_on_string";
+    private static final String CODE_NAME = "an_empty_method";
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});
         System.out.println("test saved");

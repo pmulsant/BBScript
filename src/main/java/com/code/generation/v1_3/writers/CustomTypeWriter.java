@@ -50,7 +50,7 @@ public class CustomTypeWriter extends CodeWriter {
     }
 
     private void writeMethod(Method method) throws IOException {
-        String methodHeader = customType.getName() + "(" + getParamsString(method) + ") {";
+        String methodHeader = method.getReturnedType() + " " + method.getName() + "(" + getParamsString(method) + ") {";
         writeCallable(method, methodHeader);
     }
 

@@ -273,6 +273,14 @@ public class Type {
 
     @Override
     public String toString() {
-        return "type : " + simpleName;
+        return "type : " + (simpleName != null ? (simpleName.equals(StandardKnowledges.NULL_KEY_WORD) ? "the null type" : simpleName) : "unknown");
+    }
+
+    @Override
+    public int hashCode() {
+        if(simpleName == null) {
+            return 0;
+        }
+        return simpleName.hashCode();
     }
 }

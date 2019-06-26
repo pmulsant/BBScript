@@ -8,4 +8,9 @@ public class InnerListTypable extends Typable {
         containerType.addContainerTypable(this);
         initialize();
     }
+
+    @Override
+    public String toString() {
+        return "innerListTypable : " + getType().toString();
+    }
 }
