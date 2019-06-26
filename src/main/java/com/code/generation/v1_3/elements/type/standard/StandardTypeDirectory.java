@@ -2,6 +2,7 @@ package com.code.generation.v1_3.elements.type.standard;
 
 import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericConstructor;
 import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericMethod;
+import com.code.generation.v1_3.elements.type.standard.callables.EqualsMethod;
 import com.code.generation.v1_3.elements.type.standard.callables.for_lists.constructors.CopyListGenericConstructor;
 import com.code.generation.v1_3.elements.type.standard.callables.for_lists.constructors.EmptyListGenericConstructor;
 import com.code.generation.v1_3.elements.type.standard.callables.for_lists.methods.*;
@@ -52,6 +53,8 @@ public class StandardTypeDirectory {
 
         register(new MapGenericMethod(this, typeInferenceMotor));
         register(new FilterGenericMethod(this, typeInferenceMotor));
+
+        register(new EqualsMethod(this, typeInferenceMotor));
     }
 
     private void buildSimpleStandardTypes() {

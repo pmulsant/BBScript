@@ -14,7 +14,7 @@ public class BaseTestModifierCaller {
                 "rebuild",
 
                 "failed/operating_expressions_wrong_types",
-                "add_booleans"});
+                "or_with_float"});
         /*BaseTestModifier.main(new String[]{"replace",
 
                 "failed/simple_statement/non_assignable_errors",

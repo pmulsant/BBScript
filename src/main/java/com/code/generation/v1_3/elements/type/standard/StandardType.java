@@ -32,11 +32,21 @@ public abstract class StandardType extends Type {
     }
 
     public void addConstructor(GenericConstructor constructor) {
+        genericConstructorMap.put(constructor.getParamsNumber(), constructor);
         standardTypeDirectory.register(constructor);
     }
 
     public void addMethod(GenericMethod method) {
+        genericMethodMap.put(method.getName(), method);
         standardTypeDirectory.register(method);
+    }
+
+    public Map<Integer, GenericConstructor> getGenericConstructorMap() {
+        return genericConstructorMap;
+    }
+
+    public Map<String, GenericMethod> getGenericMethodMap() {
+        return genericMethodMap;
     }
 
     @Override

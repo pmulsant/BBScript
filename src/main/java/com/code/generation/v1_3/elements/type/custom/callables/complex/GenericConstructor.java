@@ -1,5 +1,9 @@
 package com.code.generation.v1_3.elements.type.custom.callables.complex;
 
+import com.code.generation.v1_3.elements.strong_type.CanBeParameterType;
+import com.code.generation.v1_3.elements.strong_type.CanBeProvideForParameter;
+import com.code.generation.v1_3.elements.strong_type.NormalType;
+import com.code.generation.v1_3.elements.strong_type.StrongType;
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.elements.type.custom.callables.IConstructor;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Constructor;
@@ -41,4 +45,6 @@ public abstract class GenericConstructor extends GenericCallable implements ICon
         // type have already be liked
         constructor.assertRightParamsNumber(getParamsNumber());
     }
+
+    public abstract com.code.generation.v1_3.elements.strong_type.callables.Constructor makeStrongConstructor(NormalType topType, List<CanBeProvideForParameter> arguments);
 }

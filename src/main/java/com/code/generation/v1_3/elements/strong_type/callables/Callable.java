@@ -2,6 +2,7 @@ package com.code.generation.v1_3.elements.strong_type.callables;
 
 import com.code.generation.v1_3.elements.strong_type.CanAppearInReturnStat;
 import com.code.generation.v1_3.elements.strong_type.VoidType;
+import com.code.generation.v1_3.elements.strong_type.builder.StrongTypeDirectory;
 import com.code.generation.v1_3.elements.strong_type.custom.Parameter;
 import com.code.generation.v1_3.exception.ManyDefinitionForSameCallableFoundException;
 import com.code.generation.v1_3.exception.NotAlwaysReturnException;
@@ -12,10 +13,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Callable implements ICallable {
+    private StrongTypeDirectory strongTypeDirectory;
     protected List<Parameter> parameters;
     private CallableDefinition callableDefinition;
 
-    public Callable(List<Parameter> parameters) {
+    public Callable(StrongTypeDirectory strongTypeDirectory, List<Parameter> parameters) {
+        this.strongTypeDirectory = strongTypeDirectory;
         this.parameters = parameters;
     }
 
@@ -50,7 +53,7 @@ public abstract class Callable implements ICallable {
         RunnableScopeOrStatResult runnableScopeOrStatResult = (RunnableScopeOrStatResult) callableDefinition.getTypeCheckerVisitor().visit(callableDefinition.getRunnableScopeContext());
         CanAppearInReturnStat canAppearInReturnStat = runnableScopeOrStatResult.getReturnInterruption() != null ? runnableScopeOrStatResult.getReturnInterruption().getCanAppearInReturnStat() : null;
         if (canAppearInReturnStat == null || canAppearInReturnStat.isVoid()) {
-            checkReturnCompatibility(VoidType.INSTANCE);
+            checkReturnCompatibility(strongTypeDirectory.getVoidStrongType());
             return;
         }
         if (!runnableScopeOrStatResult.isAlwaysThrowsOrReturn()) {

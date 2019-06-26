@@ -20,7 +20,7 @@ public class DownTopAddMathematicalDeductionRule extends NormalRule {
         if (operable1.equals(Operable.STRING) || operable2.equals(Operable.STRING)) {
             return Collections.singletonList(Operable.STRING);
         }
-        throw new NonOperableException("there is a non (string or number type) added with a non string type");
+        throw new NonOperableException();
     };
 
     public DownTopAddMathematicalDeductionRule(Typable typable1, Typable typable2, Typable topTypable) {

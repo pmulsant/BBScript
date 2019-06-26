@@ -6,6 +6,9 @@ import com.code.generation.v1_3.elements.strong_type.callables.Method;
 import com.code.generation.v1_3.elements.strong_type.custom.Attribute;
 import com.code.generation.v1_3.elements.strong_type.custom.Parameter;
 import com.code.generation.v1_3.elements.type.Type;
+import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericConstructor;
+import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericMethod;
+import com.code.generation.v1_3.elements.type.standard.StandardType;
 import com.code.generation.v1_3.exception.WrongTypeException;
 import com.code.generation.v1_3.exception.WrongTypeFormatException;
 
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public abstract class NormalType implements CanBeReturnedType, CanBeParameterType {
     private StrongTypeDirectory strongTypeDirectory;
@@ -82,10 +86,35 @@ public abstract class NormalType implements CanBeReturnedType, CanBeParameterTyp
 
     @Override
     public void build() {
+        if(initialType instanceof StandardType){
+            //buildWithStandardType();
+            return;
+        }
         buildAttributes();
         buildConstructors();
         buildMethods();
     }
+
+    /*private void buildWithStandardType() {
+        buildStandardConstructors();
+        buildStandardMethods();
+    }
+
+    private void buildStandardConstructors() {
+        StandardType standardType = (StandardType) this.initialType;
+        for (GenericConstructor genericConstructor : standardType.getGenericConstructorMap().values()) {
+            List<Parameter> parameters = genericConstructor.getParameters(this);
+            addConstructor(new Constructor(this, parameters));
+        }
+    }
+
+    private void buildStandardMethods() {
+        StandardType standardType = (StandardType) this.initialType;
+        for (GenericMethod genericMethod : standardType.getGenericMethodMap().values()) {
+            List<Parameter> parameterTypes = genericMethod.getParameters(this);
+            addMethod(new Method(this, genericMethod.getName(), genericMethod.getReturnedType(this), parameterTypes));
+        }
+    }*/
 
     public void buildAttributes() {
         for (com.code.generation.v1_3.elements.type.custom.Attribute attribute : initialType.getAttributes().values()) {
@@ -99,7 +128,7 @@ public abstract class NormalType implements CanBeReturnedType, CanBeParameterTyp
 
     public void buildConstructors() {
         for (com.code.generation.v1_3.elements.type.custom.callables.simples.Constructor constructor : initialType.getConstructors().values()) {
-            addConstructor(new Constructor(this, getStrongParameterTypes(constructor)));
+            addConstructor(new Constructor(strongTypeDirectory, this, getStrongParameterTypes(constructor)));
         }
     }
 
@@ -109,7 +138,7 @@ public abstract class NormalType implements CanBeReturnedType, CanBeParameterTyp
             if (!(returnedType instanceof CanBeReturnedType)) {
                 throw new WrongTypeFormatException(returnedType, "can't be returned type");
             }
-            addMethod(new Method(this, method.getName(), (CanBeReturnedType) returnedType, getStrongParameterTypes(method)));
+            addMethod(new Method(strongTypeDirectory,this, method.getName(), (CanBeReturnedType) returnedType, getStrongParameterTypes(method)));
         }
     }
 
@@ -141,5 +170,9 @@ public abstract class NormalType implements CanBeReturnedType, CanBeParameterTyp
     @Override
     public String toString() {
         return getComplexName();
+    }
+
+    public StrongTypeDirectory getStrongTypeDirectory() {
+        return strongTypeDirectory;
     }
 }

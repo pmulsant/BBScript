@@ -7,9 +7,15 @@ import com.code.generation.v1_3.elements.strong_type.custom.Attribute;
 import com.code.generation.v1_3.elements.strong_type.custom.CustomType;
 import com.code.generation.v1_3.elements.strong_type.custom.Parameter;
 import com.code.generation.v1_3.elements.symbols.Variable;
+import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericConstructor;
+import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericMethod;
 import com.code.generation.v1_3.elements.type.standard.Operable;
+import com.code.generation.v1_3.elements.type.standard.callables.functions.StandardFunction;
 import com.code.generation.v1_3.exception.NonAssignableExpression;
 import com.code.generation.v1_3.exception.NonOperableException;
+import com.code.generation.v1_3.exception.for_type_checker.CantBeProvideForParameterException;
+import com.code.generation.v1_3.exception.for_type_checker.CantBeReturnedTypeException;
+import com.code.generation.v1_3.exception.for_type_checker.IsNotNormalTypeException;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.code.generation.v1_3.util.AccessibleTopContext;
 import com.code.generation.v1_3.visitors.after_deduced.result.ExpressionResult;
@@ -23,10 +29,7 @@ import com.generated.GrammarBaseVisitor;
 import com.generated.GrammarParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import java.util.IdentityHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
@@ -113,7 +116,7 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
     public Result visitIdentifier(GrammarParser.IdentifierContext ctx) {
         StrongVariable variable = variableMap.get(ctx);
         checkTypeCompatibility(variable.getNormalType(), ctx.complexId().type());
-        return new ExpressionResult(variable.getNormalType() , resultMap, ctx, variable);
+        return new ExpressionResult(variable.getNormalType(), resultMap, ctx, variable);
     }
 
     @Override
@@ -186,7 +189,7 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
         assertIsOperable(strongType1);
         assertIsOperable(strongType2);
         if (!stringType.isSame(strongType1) && !stringType.isSame(strongType2)) {
-            throw new NonOperableException("there must be one string");
+            throw new NonOperableException();
         }
         return new ExpressionResult(stringType, resultMap, ctx);
     }
@@ -382,7 +385,21 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
 
     private Result manageInstantiation(GrammarParser.ExprContext topContext, GrammarParser.TypeContext constructorType, GrammarParser.ArgsContext argsContext, GrammarParser.RunnableScopeContext runnableScopeContext) {
         NormalType topNormalType = strongTypeDirectory.getStrongType(constructorType);
-        Constructor constructor = topNormalType.getConstructors().get(argsContext.arg().size());
+        int paramsNumber = argsContext.arg().size();
+
+        Constructor constructor;
+        GenericConstructor genericConstructor = strongTypeDirectory.getGenericConstructor(constructorType, paramsNumber);
+        if (genericConstructor != null) {
+            StrongType topType = strongTypeDirectory.getStrongType(topContext);
+            if (!(topType instanceof NormalType)) {
+                throw new IsNotNormalTypeException(topType);
+            }
+            List<CanBeProvideForParameter> arguments = getArguments(argsContext);
+            constructor = genericConstructor.makeStrongConstructor((NormalType) topType, arguments);
+        } else {
+            constructor = topNormalType.getConstructors().get(paramsNumber);
+        }
+
         if (constructor == null) {
             throw new IllegalStateException("no constructor found for type " + topNormalType);
         }
@@ -392,24 +409,64 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
     private Result manageMethodCall(GrammarParser.ExprContext topContext, GrammarParser.ExprContext innerExprContext, GrammarParser.ComplexIdContext complexIdContext,
                                     GrammarParser.ArgsContext argsContext, GrammarParser.RunnableScopeContext runnableScopeContext) {
         StrongType innerType = ((ExpressionResult) visit(innerExprContext)).getStrongType();
+
         if (!(innerType instanceof NormalType)) {
             throw new IllegalStateException("can't call method of non normal type");
         }
         NormalType innerNormalType = (NormalType) innerType;
-        Method method = innerNormalType.getMethods().get(complexIdContext.ID().getText());
+        String methodName = complexIdContext.ID().getText();
+
+        GenericMethod genericMethod = strongTypeDirectory.getGenericMethod(methodName);
+        Method method;
+        if (genericMethod != null) {
+            StrongType strongType = strongTypeDirectory.getStrongType(topContext);
+            if (!(strongType instanceof CanBeReturnedType)) {
+                throw new CantBeReturnedTypeException(strongType);
+            }
+            List<CanBeProvideForParameter> arguments = getArguments(argsContext);
+            method = genericMethod.makeStrongMethod(innerNormalType, (CanBeReturnedType) strongType, arguments);
+        } else {
+            method = innerNormalType.getMethods().get(methodName);
+        }
+
         if (method == null) {
-            throw new IllegalStateException("no method " + complexIdContext.ID().getText() + " for type " + innerNormalType);
+            throw new IllegalStateException("no method " + methodName + " for type " + innerNormalType);
         }
         return manageCallable(topContext, method, method.getReturnedType(), argsContext, runnableScopeContext);
     }
 
     private Result manageFunctionCall(GrammarParser.ExprContext topContext, GrammarParser.ComplexIdContext complexIdContext, GrammarParser.ArgsContext argsContext, GrammarParser.RunnableScopeContext runnableScopeContext) {
         String functionName = complexIdContext.ID().getText();
-        Function function = strongTypeDirectory.getFunction(functionName);
+
+        StandardFunction standardFunction = strongTypeDirectory.getStandardFunction(functionName);
+        Function function;
+        if (standardFunction != null) {
+            StrongType returned = strongTypeDirectory.getStrongType(topContext);
+            if (!(returned instanceof CanBeReturnedType)) {
+                throw new CantBeReturnedTypeException(returned);
+            }
+            List<CanBeProvideForParameter> arguments = getArguments(argsContext);
+            function = standardFunction.makeStrongFunction((CanBeReturnedType) returned, arguments);
+        } else {
+            function = strongTypeDirectory.getFunction(functionName);
+        }
+
         if (function == null) {
             throw new IllegalStateException("no function with name " + functionName);
         }
         return manageCallable(topContext, function, function.getReturnedType(), argsContext, runnableScopeContext);
+    }
+
+    private List<CanBeProvideForParameter> getArguments(GrammarParser.ArgsContext argsContext) {
+        List<CanBeProvideForParameter> arguments = new ArrayList<>(argsContext.arg().size());
+        for (GrammarParser.ArgContext argContext : argsContext.arg()) {
+            StrongType argument = ((ExpressionResult) visit(argContext.expr())).getStrongType();
+            if (!(argument instanceof CanBeProvideForParameter)) {
+                throw new CantBeProvideForParameterException(argument);
+            }
+            arguments.add((CanBeProvideForParameter) argument);
+        }
+        return arguments;
     }
 
     private Result manageCallable(GrammarParser.ExprContext topContext, ICallable callable, CanBeReturnedType topType, GrammarParser.ArgsContext argsContext, GrammarParser.RunnableScopeContext runnableScopeContext) {

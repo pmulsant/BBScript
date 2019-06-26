@@ -38,11 +38,10 @@ public class ListType extends NormalType {
     @Override
     public String getComplexName() {
         return "List<" + innerType.getComplexName() + ">";
-        /*StringBuilder powerString = new StringBuilder();
-        for (int index = 0; index < power; index++) {
-            powerString.append(StandardKnowledges.LIST_TYPE_NAME);
-        }
-        return powerString.toString() + deepestCustomTypeName;*/
+    }
+
+    public NormalType getInnerType() {
+        return innerType;
     }
 
     public int getPower() {

@@ -1,12 +1,14 @@
 package com.code.generation.v1_3.elements.strong_type;
 
+import com.code.generation.v1_3.elements.strong_type.builder.StrongTypeDirectory;
 import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
 import com.code.generation.v1_3.exception.WrongTypeFormatException;
 
 public class VoidType implements StrongType, CanBeReturnedType {
-    public static final VoidType INSTANCE = new VoidType();
+    private StrongTypeDirectory strongTypeDirectory;
 
-    private VoidType() {
+    public VoidType(StrongTypeDirectory strongTypeDirectory) {
+        this.strongTypeDirectory = strongTypeDirectory;
     }
 
     @Override
@@ -21,6 +23,11 @@ public class VoidType implements StrongType, CanBeReturnedType {
     @Override
     public boolean isNull() {
         return false;
+    }
+
+    @Override
+    public StrongTypeDirectory getStrongTypeDirectory() {
+        return strongTypeDirectory;
     }
 
     @Override

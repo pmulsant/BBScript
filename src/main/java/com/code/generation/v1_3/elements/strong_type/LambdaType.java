@@ -1,5 +1,6 @@
 package com.code.generation.v1_3.elements.strong_type;
 
+import com.code.generation.v1_3.elements.strong_type.builder.StrongTypeDirectory;
 import com.code.generation.v1_3.elements.strong_type.callables.CallableDefinition;
 import com.code.generation.v1_3.elements.strong_type.callables.Lambda;
 import com.code.generation.v1_3.elements.strong_type.custom.Parameter;
@@ -15,8 +16,10 @@ import java.util.stream.Collectors;
 public class LambdaType implements CanBeParameterType {
     private CanBeReturnedType returnedType;
     private List<NormalType> parameterTypes;
+    private StrongTypeDirectory strongTypeDirectory;
 
-    public LambdaType(CanBeReturnedType returnedType, List<NormalType> parameterTypes) {
+    public LambdaType(StrongTypeDirectory strongTypeDirectory, CanBeReturnedType returnedType, List<NormalType> parameterTypes) {
+        this.strongTypeDirectory = strongTypeDirectory;
         this.returnedType = returnedType;
         this.parameterTypes = parameterTypes;
     }
@@ -55,7 +58,7 @@ public class LambdaType implements CanBeParameterType {
             typeCheckerVisitor.checkTypeCompatibility(lambdaParameterType, complexIdContext.type());
             parameters.add(new Parameter(complexIdContext.ID().getText(), lambdaParameterType));
         }
-        return new Lambda(returnedType, parameters, callableDefinition);
+        return new Lambda(strongTypeDirectory, returnedType, parameters, callableDefinition);
     }
 
     @Override

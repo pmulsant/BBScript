@@ -3,6 +3,7 @@ package com.code.generation.v1_3.elements.strong_type.callables;
 import com.code.generation.v1_3.elements.strong_type.CanAppearInReturnStat;
 import com.code.generation.v1_3.elements.strong_type.CanBeReturnedType;
 import com.code.generation.v1_3.elements.strong_type.NormalType;
+import com.code.generation.v1_3.elements.strong_type.builder.StrongTypeDirectory;
 import com.code.generation.v1_3.elements.strong_type.custom.Parameter;
 
 import java.util.List;
@@ -12,8 +13,8 @@ public class Method extends Callable implements NamedCallable, CanReturn, Linked
     private String name;
     private CanBeReturnedType returnedType;
 
-    public Method(NormalType normalType, String name, CanBeReturnedType returnedType, List<Parameter> parameters) {
-        super(parameters);
+    public Method(StrongTypeDirectory strongTypeDirectory, NormalType normalType, String name, CanBeReturnedType returnedType, List<Parameter> parameters) {
+        super(strongTypeDirectory, parameters);
         this.normalType = normalType;
         this.name = name;
         this.returnedType = returnedType;

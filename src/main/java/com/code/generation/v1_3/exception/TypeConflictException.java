@@ -5,6 +5,9 @@ import com.code.generation.v1_3.elements.type.Type;
 import com.code.generation.v1_3.elements.type.standard.StandardType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class TypeConflictException extends RuntimeCustomException {
@@ -12,15 +15,24 @@ public class TypeConflictException extends RuntimeCustomException {
         super("type conflict");
     }
 
-    public TypeConflictException(String name1, String name2){
-        super(name1 + " vs " + name2);
-    }
-
     public TypeConflictException(Type type1, Type type2){
-        super(type1 + " vs " + type2);
+        this(Arrays.asList(type1.toString(), type2.toString()), String.CASE_INSENSITIVE_ORDER);
     }
 
-    public TypeConflictException(ArrayList<StandardType> typeConflicts) {
-        super(String.join(" vs ", typeConflicts.stream().map(standardType -> standardType.toString()).collect(Collectors.toList())));
+    public TypeConflictException(String name1, String name2){
+        this(Arrays.asList(name1, name2), String.CASE_INSENSITIVE_ORDER);
+    }
+
+    public TypeConflictException(List<StandardType> typeConflicts) {
+        this(typeConflicts.stream().map(standardType -> standardType.toString()).collect(Collectors.toList()), String.CASE_INSENSITIVE_ORDER);
+    }
+
+    public TypeConflictException(List<String> typeStrs, Comparator<String> comparator){
+        super(String.join(" vs ", getSortedList(typeStrs, comparator)));
+    }
+
+    private static List<String> getSortedList(List<String> strs, Comparator<String> comparator){
+        strs.sort(comparator);
+        return strs;
     }
 }

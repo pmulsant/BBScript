@@ -9,9 +9,13 @@ import com.code.generation.v1_3.elements.strong_type.custom.CustomType;
 import com.code.generation.v1_3.elements.strong_type.custom.Parameter;
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.elements.type.Type;
+import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericConstructor;
+import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericMethod;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Lambda;
 import com.code.generation.v1_3.elements.type.standard.Operable;
 import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
+import com.code.generation.v1_3.elements.type.standard.StandardTypeDirectory;
+import com.code.generation.v1_3.elements.type.standard.callables.functions.StandardFunction;
 import com.code.generation.v1_3.elements.type.standard.simple_types.NullStandardType;
 import com.code.generation.v1_3.elements.type.standard.simple_types.VoidStandardType;
 import com.code.generation.v1_3.exception.ConstructorCoherenceException;
@@ -23,13 +27,25 @@ import com.generated.GrammarParser;
 import java.util.*;
 
 public class StrongTypeDirectory {
+    private StandardTypeDirectory standardTypeDirectory;
+
+    private VoidType voidType;
+
     private Map<String, CustomType> customTypes = new HashMap<>();
     private Map<String, Map<Integer, ListType>> listTypes = new HashMap<>();
     private Map<Type, StrongType> typeStrongTypeMap = new IdentityHashMap<>();
+    private Map<GrammarParser.ExprContext, StrongType> exprContextStrongTypeMap = new IdentityHashMap<>();
     private Map<String, Function> functionMap = new HashMap<>();
 
     public StrongTypeDirectory(TypeInferenceMotor typeInferenceMotor) {
+        standardTypeDirectory = typeInferenceMotor.getStandardTypeDirectory();
+        voidType = new VoidType(this);
+
         for (Typable typable : typeInferenceMotor.getTypables()) {
+            if(typable instanceof TypeInferenceMotor.TypableExpression){
+                GrammarParser.ExprContext exprContext = ((TypeInferenceMotor.TypableExpression) typable).getExprContext();
+                exprContextStrongTypeMap.computeIfAbsent(exprContext, key -> getStrongType(typable.getType()));
+            }
             Type type = typable.getType();
             typeStrongTypeMap.computeIfAbsent(type, aType -> {
                 if(aType instanceof NullStandardType){
@@ -47,7 +63,7 @@ public class StrongTypeDirectory {
     }
 
     public VoidType getVoidStrongType() {
-        return VoidType.INSTANCE;
+        return voidType;
     }
 
     public CustomType getStrongTypeRegex() {
@@ -56,6 +72,10 @@ public class StrongTypeDirectory {
 
     public CustomType getStrongType(Operable operable) {
         return (CustomType) getStrongType(0, operable.getName());
+    }
+
+    public StrongType getStrongType(GrammarParser.ExprContext exprContext){
+        return exprContextStrongTypeMap.get(exprContext);
     }
 
     public NormalType getStrongType(GrammarParser.TypeContext constructorType) {
@@ -69,7 +89,7 @@ public class StrongTypeDirectory {
     private CanBeReturnedType getStrongType(int powNumber, String simpleTypeName) {
         if (powNumber == 0) {
             if (simpleTypeName.equals("void")) {
-                return VoidType.INSTANCE;
+                return voidType;
             }
             return customTypes.get(simpleTypeName);
         }
@@ -82,7 +102,7 @@ public class StrongTypeDirectory {
             return strongType;
         }
         if (type instanceof VoidStandardType) {
-            return VoidType.INSTANCE;
+            return voidType;
         }
         if(type instanceof NullStandardType){
             return NullType.INSTANCE;
@@ -125,7 +145,7 @@ public class StrongTypeDirectory {
             }
             parameterStrongTypes.add((NormalType) aStrongType);
         }
-        return new LambdaType((CanBeReturnedType) returnedType, parameterStrongTypes);
+        return new LambdaType(this, (CanBeReturnedType) returnedType, parameterStrongTypes);
     }
 
     private CustomType buildCustomType(Type type) {
@@ -154,7 +174,7 @@ public class StrongTypeDirectory {
         if (!(returnedStrongType instanceof CanBeReturnedType)) {
             throw new WrongTypeFormatException(returnedStrongType, "returned type can't be lambda");
         }
-        return new Function(function.getName(), (CanBeReturnedType) returnedStrongType, parameters);
+        return new Function(this, function.getName(), (CanBeReturnedType) returnedStrongType, parameters);
     }
 
     public Function getFunction(String functionName) {
@@ -187,5 +207,25 @@ public class StrongTypeDirectory {
         if(callable.getCallableDefinition() == null){
             throw new MissingCallableDefinitionException(callable);
         }
+    }
+
+    public GenericMethod getGenericMethod(String methodName) {
+        return standardTypeDirectory.getMethod(methodName);
+    }
+
+    public GenericConstructor getGenericConstructor(GrammarParser.TypeContext typeContext, int paramsNumber) {
+        Map<Integer, GenericConstructor> constructorMap = standardTypeDirectory.getConstructorMap(typeContext);
+        if(constructorMap == null){
+            return null;
+        }
+        GenericConstructor genericConstructor = constructorMap.get(paramsNumber);
+        if(genericConstructor == null){
+            throw new IllegalStateException();
+        }
+        return genericConstructor;
+    }
+
+    public StandardFunction getStandardFunction(String functionName) {
+        return standardTypeDirectory.getStandardFunction(functionName);
     }
 }

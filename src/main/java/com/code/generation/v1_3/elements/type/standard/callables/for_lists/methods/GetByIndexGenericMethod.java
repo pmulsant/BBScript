@@ -1,7 +1,13 @@
 package com.code.generation.v1_3.elements.type.standard.callables.for_lists.methods;
 
+import com.code.generation.v1_3.elements.strong_type.*;
+import com.code.generation.v1_3.elements.strong_type.builder.StrongTypeDirectory;
+import com.code.generation.v1_3.elements.strong_type.callables.Method;
+import com.code.generation.v1_3.elements.strong_type.custom.CustomType;
+import com.code.generation.v1_3.elements.strong_type.custom.Parameter;
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericMethod;
+import com.code.generation.v1_3.elements.type.standard.Operable;
 import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
 import com.code.generation.v1_3.elements.type.standard.StandardTypeDirectory;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
@@ -20,5 +26,14 @@ public class GetByIndexGenericMethod extends GenericMethod {
     protected void processLinksSpecial(Typable innerTypable, Typable returnedTypable, List<? extends Typable> typableArguments) {
         Typable innerListTypable = innerTypable.getType().setList();
         typeInferenceMotor.addFusionOfTypesDeclaration(returnedTypable, innerListTypable);
+    }
+
+    @Override
+    public Method makeStrongMethod(NormalType innerNormalType, CanBeReturnedType returned, List<CanBeProvideForParameter> arguments) {
+        StrongTypeDirectory strongTypeDirectory = innerNormalType.getStrongTypeDirectory();
+        CustomType intType = strongTypeDirectory.getStrongType(Operable.STRING);
+        Parameter parameter = new Parameter(null, intType);
+        NormalType innerListType = ((ListType) innerNormalType).getInnerType();
+        return new Method(innerNormalType.getStrongTypeDirectory(), innerNormalType, getName(), innerListType, Collections.singletonList(parameter));
     }
 }
