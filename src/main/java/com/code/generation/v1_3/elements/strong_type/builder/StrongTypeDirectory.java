@@ -25,6 +25,7 @@ import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.generated.GrammarParser;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class StrongTypeDirectory {
     private StandardTypeDirectory standardTypeDirectory;
@@ -227,5 +228,9 @@ public class StrongTypeDirectory {
 
     public StandardFunction getStandardFunction(String functionName) {
         return standardTypeDirectory.getStandardFunction(functionName);
+    }
+
+    public List<Function> getNonStandardFunctions() {
+        return new ArrayList<>(functionMap.values());
     }
 }

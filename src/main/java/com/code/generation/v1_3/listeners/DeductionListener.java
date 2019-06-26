@@ -126,6 +126,11 @@ public class DeductionListener extends GrammarBaseListener {
 
     @Override
     public void exitMethodCallAndDef(GrammarParser.MethodCallAndDefContext ctx) {
+        manageNoReturnCase();
+        topContext.exitContext();
+    }
+
+    private void manageNoReturnCase(){
         TopCallableContext currentContext = topContext.getCurrentContext();
         if(!currentContext.isReturn()){
             ISimpleCallable callable = currentContext.getCallable();
@@ -134,7 +139,6 @@ public class DeductionListener extends GrammarBaseListener {
                 typeInferenceMotor.addFusionOfTypesDeclaration(returned, typeInferenceMotor.getStandardTypable(StandardKnowledges.VOID_TYPE_NAME));
             }
         }
-        topContext.exitContext();
     }
 
     @Override
@@ -147,6 +151,12 @@ public class DeductionListener extends GrammarBaseListener {
     public void enterFunctionCallAndDef(GrammarParser.FunctionCallAndDefContext ctx) {
         manageFunctionCall(ctx, ctx.complexId(),
                 ctx.args(), ctx.runnableScope());
+    }
+
+    @Override
+    public void exitFunctionCallAndDef(GrammarParser.FunctionCallAndDefContext ctx) {
+        manageNoReturnCase();
+        topContext.exitContext();
     }
 
     @Override

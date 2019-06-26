@@ -1,7 +1,9 @@
 class MyType {
 	MyType() {
 	}
+	
 	void myMethod() {
 		return;
 	}
+	
 }

@@ -2,6 +2,7 @@ package com.code.generation.v1_3.elements.build;
 
 import com.code.generation.v1_3.elements.scope.Code;
 import com.code.generation.v1_3.elements.strong_type.builder.StrongTypeDirectory;
+import com.code.generation.v1_3.elements.strong_type.callables.Function;
 import com.code.generation.v1_3.elements.strong_type.custom.CustomType;
 import com.code.generation.v1_3.visitors.after_deduced.result.Result;
 import com.code.generation.v1_3.writers.CodeDirectory;
@@ -24,7 +25,7 @@ public class BuiltData {
     }
 
     public void compile(File targetDirectory) throws IOException {
-        CodeDirectory codeDirectory = new CodeDirectory(targetDirectory, resultMap);
+        CodeDirectory codeDirectory = new CodeDirectory(targetDirectory, resultMap, strongTypeDirectory.getNonStandardFunctions());
         for (CustomType customType : strongTypeDirectory.getCustomTypes().values()) {
             codeDirectory.addCustomType(customType);
         }

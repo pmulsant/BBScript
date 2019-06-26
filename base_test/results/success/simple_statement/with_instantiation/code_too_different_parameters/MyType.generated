@@ -1,4 +1,5 @@
 class MyType {
 	MyType(int a, String b) {
 	}
+	
 }

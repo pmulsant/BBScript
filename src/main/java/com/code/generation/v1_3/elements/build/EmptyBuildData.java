@@ -4,6 +4,7 @@ import com.code.generation.v1_3.writers.CodeDirectory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.IdentityHashMap;
 
 public class EmptyBuildData extends BuiltData {
@@ -13,7 +14,7 @@ public class EmptyBuildData extends BuiltData {
 
     @Override
     public void compile(File targetDirectory) throws IOException {
-        CodeDirectory codeDirectory = new CodeDirectory(targetDirectory, new IdentityHashMap<>());
+        CodeDirectory codeDirectory = new CodeDirectory(targetDirectory, new IdentityHashMap<>(), Collections.EMPTY_LIST);
         codeDirectory.write();
     }
 }

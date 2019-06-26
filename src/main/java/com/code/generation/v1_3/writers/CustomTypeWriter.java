@@ -60,6 +60,7 @@ public class CustomTypeWriter extends CodeWriter {
         StatementResult statementResult = (StatementResult) new CompilerVisitor(resultMap).visit(callableDefinition.getRunnableScopeContext());
         writeStatementResult(statementResult, INNER_CALLABLE_INDENT_LEVEL);
         writeLine("}", INNER_CLASS_INDENT_LEVEL);
+        writeLine("", INNER_CLASS_INDENT_LEVEL);
     }
 
     public String getParamsString(Callable callable){

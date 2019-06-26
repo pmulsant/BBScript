@@ -30,6 +30,9 @@ import java.util.Map;
 public class GlobalScope extends BaseScope {
     private static final String CODE_EXTENSION_NAME = ".auto";
     public static final String GENERATED_EXTENSION_NAME = ".generated";
+    public static final String UTIL = "Util";
+
+
     private static final String GLOBAL_VARIABLE_NAME = "global";
     public static final String GLOBAL_TYPE_NAME = makeTypeName(GLOBAL_VARIABLE_NAME);
     private static final String MODEL_VARIABLE_NAME = "model";

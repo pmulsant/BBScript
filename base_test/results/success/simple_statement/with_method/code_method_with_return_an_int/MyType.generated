@@ -1,7 +1,9 @@
 class MyType {
 	MyType() {
 	}
+	
 	int myMethod() {
-		return2;
+		return 2;
 	}
+	
 }
