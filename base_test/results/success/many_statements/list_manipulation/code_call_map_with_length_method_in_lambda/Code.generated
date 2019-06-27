@@ -1,0 +1,3 @@
+List<int> anIntList;
+List<String> $myList;
+anIntList = $myList.map(item -> item.length());

@@ -14,6 +14,7 @@ import com.code.generation.v1_3.elements.type.standard.Operable;
 import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
 import com.code.generation.v1_3.elements.type.standard.StandardType;
 import com.code.generation.v1_3.elements.type.standard.StandardTypeDirectory;
+import com.code.generation.v1_3.exception.TypeConflictException;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 
 import java.util.Collections;
@@ -40,8 +41,8 @@ public class EqualsMethod extends GenericMethod {
         }
 
         CanBeProvideForParameter canBeProvideForParameter = arguments.get(0);
-        if(innerNormalType.isSame(canBeProvideForParameter)){
-            throw new IllegalStateException();
+        if(!innerNormalType.isSame(canBeProvideForParameter)){
+            throw new TypeConflictException(innerNormalType.getComplexName(), canBeProvideForParameter.toString());
         }
         Parameter parameter = new Parameter(null, (CanBeParameterType) canBeProvideForParameter);
         return new Method(strongTypeDirectory, innerNormalType, getName(), booleanType, Collections.singletonList(parameter));

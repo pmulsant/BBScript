@@ -1,0 +1,4 @@
+List<int> sizes;
+List<List<char>> $myList;
+sizes = $myList.map(aList -> aList.size());
+$myList.get(1).add('a');

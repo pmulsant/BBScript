@@ -1,0 +1,2 @@
+sizes = $myList.map(aList -> aList.size());
+$myList.get(1).add('a');

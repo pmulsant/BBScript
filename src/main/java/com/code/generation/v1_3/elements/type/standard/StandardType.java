@@ -93,6 +93,9 @@ public abstract class StandardType extends Type {
         for (Method method : type.getMethods().values()) {
             GenericMethod standardMethod = genericMethodMap.get(method.getName());
             if(standardMethod == null){
+                standardMethod = standardTypeDirectory.getObjectMethod(method.getName());
+            }
+            if (standardMethod == null) {
                 throw new NotStandardCallableForThisTypeException(this, method);
             }
             standardMethod.checkIsRespectedByMethod(method);

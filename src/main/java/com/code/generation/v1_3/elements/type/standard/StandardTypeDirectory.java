@@ -3,6 +3,7 @@ package com.code.generation.v1_3.elements.type.standard;
 import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericConstructor;
 import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericMethod;
 import com.code.generation.v1_3.elements.type.standard.callables.EqualsMethod;
+import com.code.generation.v1_3.elements.type.standard.callables.ToStringMethod;
 import com.code.generation.v1_3.elements.type.standard.callables.for_lists.constructors.CopyListGenericConstructor;
 import com.code.generation.v1_3.elements.type.standard.callables.for_lists.constructors.EmptyListGenericConstructor;
 import com.code.generation.v1_3.elements.type.standard.callables.for_lists.methods.*;
@@ -12,10 +13,14 @@ import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.generated.GrammarParser;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class StandardTypeDirectory {
     private TypeInferenceMotor typeInferenceMotor;
+
+    private Map<String, GenericMethod> objectMethods = new HashMap<>();
 
     private Map<String, StandardType> standardTypeMap = new HashMap<>();
     private Map<Integer, GenericConstructor> listConstructorMap = new HashMap<>();
@@ -29,6 +34,7 @@ public class StandardTypeDirectory {
         addListElements();
         addStandardFunctions();
         buildSimpleStandardTypes();
+        buildObjectMethods();
     }
 
     private void addStandardTypes() {
@@ -54,8 +60,6 @@ public class StandardTypeDirectory {
 
         new MapGenericMethod(this, typeInferenceMotor);
         new FilterGenericMethod(this, typeInferenceMotor);
-
-        new EqualsMethod(this, typeInferenceMotor);
     }
 
     private void addStandardFunctions() {
@@ -71,6 +75,14 @@ public class StandardTypeDirectory {
         for (StandardType standardType : standardTypeMap.values()) {
             standardType.build();
         }
+    }
+
+    private void buildObjectMethods() {
+        EqualsMethod equalsMethod = new EqualsMethod(this, typeInferenceMotor);
+        ToStringMethod toStringMethod = new ToStringMethod(this, typeInferenceMotor);
+
+        objectMethods.put(equalsMethod.getName(), equalsMethod);
+        objectMethods.put(toStringMethod.getName(), toStringMethod);
     }
 
     private void addStandardType(StandardType standardType) {
@@ -111,5 +123,9 @@ public class StandardTypeDirectory {
 
     public StandardFunction getStandardFunction(String functionName) {
         return standardFunctions.get(functionName);
+    }
+
+    public GenericMethod getObjectMethod(String methodName) {
+        return objectMethods.get(methodName);
     }
 }

@@ -1,0 +1,4 @@
+List<int> anIntList;
+List<String> $myList;
+anIntList = $myList.map(item -> 1);
+$myList.add("ok");

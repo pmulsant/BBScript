@@ -1,0 +1,5 @@
+List<int> sizes;
+List<List<String>> $myList;
+sizes = $myList.map(aList -> aList.size());
+String $aVariable;
+$myList.get(1).add(hash($aVariable));
