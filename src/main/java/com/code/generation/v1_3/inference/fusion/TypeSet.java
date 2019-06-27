@@ -53,7 +53,7 @@ public class TypeSet {
 
     public void checkTypeSetOfTypesCoherence() {
         for (Type type : types) {
-            if(type.getTypeSet() != this){
+            if (type.getTypeSet() != this) {
                 throw new IllegalStateException();
             }
         }
@@ -92,7 +92,7 @@ public class TypeSet {
         fusionAppearance(newType);
         FusionDeclaration aFusionDeclaration = fusionList(newType);
         FusionDeclaration containerTypablesFusionDeclaration = fusionContainerTypables(newType);
-        if(containerTypablesFusionDeclaration != null) {
+        if (containerTypablesFusionDeclaration != null) {
             fusionDeclarations.add(containerTypablesFusionDeclaration);
         }
         if (aFusionDeclaration != null) {
@@ -107,11 +107,11 @@ public class TypeSet {
     private void cleanTypeSetWithNewType(Type newType) {
         ArrayList<Type> oldTypes = new ArrayList<>(this.types);
         for (Type oldType : oldTypes) {
-            if(oldType.canBeReplaced()) {
+            if (oldType.canBeReplaced()) {
                 oldType.replaceBy(newType);
             }
         }
-        if(types.size() != 1){
+        if (types.size() != 1) {
             throw new IllegalStateException();
         }
     }
@@ -191,19 +191,19 @@ public class TypeSet {
         }
         if (isList) {
             newType.setList();
-            List<Typable> innerTypables = types.stream().map(type -> type.getInnerTypable()).filter(Objects::nonNull).collect(Collectors.toList());
-            innerTypables.add(newType.getInnerTypable());
-            return new FusionDeclaration(typeInferenceMotor, innerTypables);
+            Set<Typable> innerListTypables = types.stream().map(type -> type.getInnerTypable()).filter(Objects::nonNull).collect(Collectors.toSet());
+            innerListTypables.add(newType.getInnerTypable());
+            return new FusionDeclaration(typeInferenceMotor, innerListTypables);
         }
         return null;
     }
 
     private FusionDeclaration fusionContainerTypables(Type newType) {
-        List<Typable> containerTypables = new LinkedList<>();
+        Set<Typable> containerTypables = new HashSet<>();
         for (Type type : types) {
             containerTypables.addAll(type.getContainerTypables());
         }
-        if(containerTypables.isEmpty()){
+        if (containerTypables.isEmpty()) {
             return null;
         }
         return new FusionDeclaration(typeInferenceMotor, containerTypables);
@@ -216,7 +216,7 @@ public class TypeSet {
             attributeNames.addAll(type.getAttributes().keySet());
         }
         for (String attributeName : attributeNames) {
-            LinkedList<Attribute> attributes = new LinkedList<>();
+            Set<Typable> attributes = new HashSet<>();
             for (Type type : types) {
                 Attribute attribute = type.getAttributeNoCreate(attributeName);
                 if (attribute != null) {
@@ -224,7 +224,7 @@ public class TypeSet {
                 }
             }
             if (!attributes.isEmpty()) {
-                boolean isStrong = attributes.stream().anyMatch(attribute -> attribute.isStrong());
+                boolean isStrong = attributes.stream().anyMatch(attribute -> ((Attribute) attribute).isStrong());
                 attributes.add(newType.getAttribute(attributeName, isStrong));
                 result.add(new FusionDeclaration(typeInferenceMotor, attributes));
             }
@@ -258,7 +258,7 @@ public class TypeSet {
 
     private int fusionParamsNumber(String methodName, List<Method> methods) {
         Set<Integer> paramsNumbers = methods.stream().map(method -> method.getParamsNumber()).collect(Collectors.toSet());
-        if(paramsNumbers.size() != 1){
+        if (paramsNumbers.size() != 1) {
             throw new WrongParamNumberException("more than one params number possibilities for callable " + methodName);
         }
         return Util.getOneFromSet(paramsNumbers);
@@ -291,7 +291,7 @@ public class TypeSet {
         for (CanReturn canReturn : canReturns) {
             canReturn.assertRightParamsNumber(newCanReturn.getParamsNumber());
         }
-        List<Typable> returnedTypables = canReturns.stream().map(canReturn -> canReturn.getReturnedTypable()).collect(Collectors.toList());
+        Set<Typable> returnedTypables = canReturns.stream().map(canReturn -> canReturn.getReturnedTypable()).collect(Collectors.toSet());
         returnedTypables.add(newCanReturn.getReturnedTypable());
         result.add(new FusionDeclaration(typeInferenceMotor, returnedTypables));
         result.addAll(fusionParams(newCanReturn, canReturns));
@@ -302,7 +302,7 @@ public class TypeSet {
         List<FusionDeclaration> result = new ArrayList<>(callable.getParamsNumber());
         for (int index = 0; index < callable.getParamsNumber(); index++) {
             int finalIndex = index;
-            List<Typable> paramTypables = callables.stream().map(aCallable -> aCallable.getParameter(finalIndex)).collect(Collectors.toList());
+            Set<Typable> paramTypables = callables.stream().map(aCallable -> aCallable.getParameter(finalIndex)).collect(Collectors.toSet());
             Parameter newParameter = callable.getParameter(finalIndex);
             paramTypables.add(newParameter);
 
@@ -313,13 +313,13 @@ public class TypeSet {
         return result;
     }
 
-    private void setNameForParameter(Parameter newParameter, int parameterIndex, List<? extends ISimpleCallable> callables){
+    private void setNameForParameter(Parameter newParameter, int parameterIndex, List<? extends ISimpleCallable> callables) {
         Set<String> paramNames = callables.stream().map(aCallable -> aCallable.getParameter(parameterIndex).getName()).filter(Objects::nonNull).collect(Collectors.toSet());
-        if(paramNames.size() > 1){
+        if (paramNames.size() > 1) {
             throw new WrongArgumentConventionException("more than one name for parameter");
         }
         String paramName = Util.getOneFromSet(paramNames);
-        if(paramName != null){
+        if (paramName != null) {
             newParameter.setName(paramName);
         }
     }

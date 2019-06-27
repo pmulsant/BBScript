@@ -286,10 +286,11 @@ public class Type {
 
     @Override
     public int hashCode() {
-        if(simpleName == null) {
+        /*if(simpleName == null) {
             return 0;
         }
-        return simpleName.hashCode();
+        return simpleName.hashCode();*/
+        return 0;
     }
 
     public List<Typable> getTypables() {

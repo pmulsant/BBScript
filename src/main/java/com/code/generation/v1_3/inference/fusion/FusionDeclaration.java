@@ -5,21 +5,20 @@ import com.code.generation.v1_3.elements.type.Type;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.code.generation.v1_3.util.Util;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FusionDeclaration {
     private TypeInferenceMotor typeInferenceMotor;
-    private List<? extends Typable> typables;
+    private Set<Typable> typables;
+    private boolean isUsed;
 
     public FusionDeclaration(TypeInferenceMotor typeInferenceMotor, Typable typable1, Typable typable2) {
-        this(typeInferenceMotor, Arrays.asList(typable1, typable2));
+        this(typeInferenceMotor, Stream.of(typable1, typable2).collect(Collectors.toSet()));
     }
 
-    public FusionDeclaration(TypeInferenceMotor typeInferenceMotor, List<? extends Typable> typables) {
+    public FusionDeclaration(TypeInferenceMotor typeInferenceMotor, Set<Typable> typables) {
         this.typeInferenceMotor = typeInferenceMotor;
         if(typables.isEmpty()){
             throw new IllegalStateException();
@@ -37,6 +36,7 @@ public class FusionDeclaration {
         }
         TypeSet newTypeSet = new TypeSet(typeInferenceMotor, typeSets);
         newTypeSet.getTypes().forEach(type -> type.setTypeSet(newTypeSet));
+        isUsed = true;
         return newTypeSet;
     }
 
@@ -51,7 +51,11 @@ public class FusionDeclaration {
         return stringBuilder.toString();
     }
 
-    public List<? extends Typable> getTypables() {
+    public Set<Typable> getTypables() {
         return typables;
+    }
+
+    public boolean isNotUsed() {
+        return !isUsed;
     }
 }

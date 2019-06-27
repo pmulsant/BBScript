@@ -23,9 +23,9 @@ public abstract class StandardType extends Type {
     public StandardType(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor, String name) {
         super(typeInferenceMotor);
         this.standardTypeDirectory = standardTypeDirectory;
-        this.standardTypable = new StandardTypable(typeInferenceMotor, this);
         isVoid = false;
         simpleName = name;
+        this.standardTypable = new StandardTypable(typeInferenceMotor, this);
     }
 
     public void build() {

@@ -276,7 +276,8 @@ public class DeductionListener extends GrammarBaseListener {
 
     @Override
     public void enterLambdaExpr(GrammarParser.LambdaExprContext ctx) {
-        Lambda lambda = typeInferenceMotor.getTypableExpressionFromExpr(ctx, false).getType().setLambda(ctx.lambdaArg().complexId().size());
+        Typable topTypable = typeInferenceMotor.getTypableExpressionFromExpr(ctx, false);
+        Lambda lambda = topTypable.getType().setLambda(ctx.lambdaArg().complexId().size());
         topContext.enterContext(new TopCallableContext(null, lambda));
         GrammarParser.ExprContext expr = ctx.lambdaProcess().expr();
         if (expr != null) {
@@ -368,7 +369,8 @@ public class DeductionListener extends GrammarBaseListener {
                     parameter.getType().setName(argContext.complexId().type());
                 }
             }
-            typeInferenceMotor.addFusionOfTypesDeclaration(typeInferenceMotor.getTypableExpressionFromExpr(argContext.expr(), false), parameter);
+            Typable argumentTypable = typeInferenceMotor.getTypableExpressionFromExpr(argContext.expr(), false);
+            typeInferenceMotor.addFusionOfTypesDeclaration(argumentTypable, parameter);
         }
     }
 

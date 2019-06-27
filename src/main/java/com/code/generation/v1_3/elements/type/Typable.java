@@ -22,9 +22,9 @@ public abstract class Typable {
         typeInferenceMotor.addTypable(this);
     }
 
-    public void setType(Type type) {
-        this.type = type;
-        type.addTypable(this);
+    public void setType(Type newType) {
+        this.type = newType;
+        newType.addTypable(this);
     }
 
     public Type getType() {

@@ -2,7 +2,12 @@ package com.code.generation.v1_3.inference.rules;
 
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.elements.type.Type;
+import com.code.generation.v1_3.elements.type.standard.Operable;
+import com.code.generation.v1_3.elements.type.standard.StandardTypable;
+import com.code.generation.v1_3.elements.type.standard.StandardType;
 import com.code.generation.v1_3.exception.NonOperableException;
+import com.code.generation.v1_3.inference.TypeInferenceMotor;
+import com.code.generation.v1_3.inference.fusion.FusionDeclaration;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -10,12 +15,21 @@ import java.util.List;
 import java.util.Set;
 
 public class OperablesRuleMotor {
-    private Set<Rule> rules = new HashSet<>();
-    private Set<Typable> deducedTypables = new HashSet<>();
+    private TypeInferenceMotor typeInferenceMotor;
 
-    public void infer() {
+    private Set<Rule> rules;
+    private Set<Typable> deducedTypables = new HashSet<>();
+    private Set<FusionDeclaration> fusionDeclarations = new HashSet<>();
+
+    public OperablesRuleMotor(TypeInferenceMotor typeInferenceMotor, Set<Rule> rules){
+        this.typeInferenceMotor = typeInferenceMotor;
+        this.rules = rules;
+    }
+
+    public Set<FusionDeclaration> infer() {
         initDeducedTypables();
         while (canInfer()) ;
+        return fusionDeclarations;
     }
 
     private boolean canInfer() {
@@ -35,7 +49,10 @@ public class OperablesRuleMotor {
             }
             progress = true;
             for (Deduction deduction : deductions) {
-                deduction.getTypable().getType().setName(deduction.getOperable());
+                Operable operable = deduction.getOperable();
+                Typable standardTypable = typeInferenceMotor.getStandardTypable(operable.getName());
+                fusionDeclarations.add(new FusionDeclaration(typeInferenceMotor, deduction.getTypable(), standardTypable));
+                deduction.getTypable().getType().setName(operable);
                 deducedTypables.add(deduction.getTypable());
             }
         }

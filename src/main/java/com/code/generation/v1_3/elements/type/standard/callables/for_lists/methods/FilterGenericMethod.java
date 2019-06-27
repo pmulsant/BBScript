@@ -9,6 +9,7 @@ import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericMe
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Lambda;
 import com.code.generation.v1_3.elements.type.standard.Operable;
 import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
+import com.code.generation.v1_3.elements.type.standard.StandardType;
 import com.code.generation.v1_3.elements.type.standard.StandardTypeDirectory;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 
@@ -29,7 +30,8 @@ public class FilterGenericMethod extends GenericMethod {
         Lambda lambda = typableArguments.get(0).getType().setLambda(1);
         typeInferenceMotor.addFusionOfTypesDeclaration(innerReturnedListTypable, innerInnerTypeListTypable);
         typeInferenceMotor.addFusionOfTypesDeclaration(lambda.getParameter(0), innerInnerTypeListTypable);
-        fusionIfNonNull(lambda.getReturnedTypable(), standardTypeDirectory.getStandardType(StandardKnowledges.BOOLEAN_TYPE_NAME));
+        StandardType booleanType = standardTypeDirectory.getStandardType(StandardKnowledges.BOOLEAN_TYPE_NAME);
+        fusionIfNonNull(lambda.getReturnedTypable(), booleanType);
     }
 
     @Override

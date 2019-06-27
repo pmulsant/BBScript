@@ -117,10 +117,20 @@ public class VariableAndParametersVisitor extends GrammarBaseVisitor<Variable> {
 
     @Override
     public Variable visitLambdaExpr(GrammarParser.LambdaExprContext ctx) {
-        scopeDataContext.enterContext(new ScopeData(createCallableScopeForLambda(ctx.lambdaArg())));
-        Variable result = super.visitLambdaExpr(ctx);
+        Scope lambdaScope = createCallableScopeForLambda(ctx.lambdaArg());
+        scopeDataContext.enterContext(new ScopeData(lambdaScope));
+        ScopeData context = new ScopeData(new LocalScope(lambdaScope, 0));
+        initializeOrIncrementStatIndex(context);
+        scopeDataContext.enterContext(context);
+        Variable result = visit(ctx.lambdaProcess());
         scopeDataContext.exitContext();
         return result;
+    }
+
+    private void initializeOrIncrementStatIndex(ScopeData context) {
+        Integer statIndex = context.getStatIndex();
+        statIndex = (statIndex == null ? 0 : statIndex + 1);
+        context.setStatIndex(statIndex);
     }
 
     @Override
@@ -165,9 +175,7 @@ public class VariableAndParametersVisitor extends GrammarBaseVisitor<Variable> {
     /**********************/
 
     private Variable manageVisitIsStat(GrammarParser.StatContext ctx){
-        Integer statIndex = scopeDataContext.getCurrentContext().getStatIndex();
-        statIndex = (statIndex == null ? 0 : statIndex + 1);
-        scopeDataContext.getCurrentContext().setStatIndex(statIndex);
+        initializeOrIncrementStatIndex(scopeDataContext.getCurrentContext());
         return visitFirstChild(ctx);
     }
 

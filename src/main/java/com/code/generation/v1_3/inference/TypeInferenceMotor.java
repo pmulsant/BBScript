@@ -37,8 +37,6 @@ public class TypeInferenceMotor {
     private FusionMotor fusionMotor;
     private Map<GrammarParser.ExprContext, TypableExpression> typableExpressions = new IdentityHashMap<>();
 
-    private OperablesRuleMotor operablesRuleMotor = new OperablesRuleMotor();
-
     public TypeInferenceMotor() {
         fusionMotor = new FusionMotor(this);
         standardTypeDirectory = new StandardTypeDirectory(this);
@@ -63,8 +61,6 @@ public class TypeInferenceMotor {
     }
 
     public void infer() {
-        fusionMotor.fusion();
-        operablesRuleMotor.infer();
         fusionMotor.fusion();
     }
 
@@ -137,7 +133,7 @@ public class TypeInferenceMotor {
     }
 
     public void addRule(Rule rule) {
-        operablesRuleMotor.addRule(rule);
+        fusionMotor.addRule(rule);
     }
 
     public List<Typable> getTypables() {
