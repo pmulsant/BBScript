@@ -17,8 +17,9 @@ public class DownTopMulMathematicalDeductionRule extends NormalRule {
             if (!operable.isNumber()) {
                 throw new NonOperableException("mul a non number");
             }
-            operable.equals(Operable.FLOAT);
-            isThereFloat = true;
+            if(operable.equals(Operable.FLOAT)) {
+                isThereFloat = true;
+            }
         }
         return Collections.singletonList(isThereFloat ? Operable.FLOAT : Operable.INT);
     };
