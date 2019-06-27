@@ -1,0 +1,11 @@
+class MyType {
+	int attr;
+	
+	MyType() {
+	}
+	
+	void method() {
+		this.attr = 5;
+	}
+	
+}

@@ -1,0 +1,3 @@
+new MyType(){}.method(){
+    this.attr = 5;
+};

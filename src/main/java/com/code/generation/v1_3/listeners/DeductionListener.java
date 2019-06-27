@@ -81,7 +81,7 @@ public class DeductionListener extends GrammarBaseListener {
         if (ctx.complexId().ID().getText().equals(StandardKnowledges.THIS_VARIABLE_NAME)) {
             Typable currentTypable = topContext.getCurrentContext().getInnerTypable();
             if (currentTypable == null) {
-                throw new WrongUsageOfThisException("this can't be used outside a constructor or a method");
+                throw new WrongUsageOfThisException();
             }
             typeInferenceMotor.addFusionOfTypesDeclaration(typable, currentTypable);
         }
@@ -289,7 +289,7 @@ public class DeductionListener extends GrammarBaseListener {
         Typable topTypable = typeInferenceMotor.getTypableExpressionFromExpr(ctx, false);
         Lambda lambda = topTypable.getType().setLambda(ctx.lambdaArg().complexId().size());
         bindArgsExprToParameters(lambda, null, ctx.lambdaArg().complexId());
-        topContext.enterContext(new TopCallableContext(null, lambda));
+        topContext.enterContext(new TopCallableContext(lambda));
         GrammarParser.ExprContext expr = ctx.lambdaProcess().expr();
         if (expr != null) {
             manageReturnProcess(expr);
@@ -325,7 +325,7 @@ public class DeductionListener extends GrammarBaseListener {
         boolean isDefined = runnableScopeContext != null;
         typeInferenceMotor.processLinkIfStandardConstructor(topTypable, constructor, isDefined, typeContext);
         if (isDefined) {
-            topContext.enterContext(new TopCallableContext(null, constructor));
+            topContext.enterContext(new TopCallableContext(topTypable, constructor));
             manageThisVariable(topDefContext, topTypable);
         }
     }
@@ -342,7 +342,7 @@ public class DeductionListener extends GrammarBaseListener {
         boolean isDefined = runnableScopeContext != null;
         typeInferenceMotor.processLinkIfStandardMethod(innerTypable, method, isDefined);
         if (isDefined) {
-            topContext.enterContext(new TopCallableContext(null, method));
+            topContext.enterContext(new TopCallableContext(innerTypable, method));
             manageThisVariable(topDefContext, innerTypable);
         }
     }
@@ -363,7 +363,7 @@ public class DeductionListener extends GrammarBaseListener {
         boolean isDefined = runnableScopeContext != null;
         typeInferenceMotor.processLinkIfStandardFunction(function, isDefined);
         if (isDefined) {
-            topContext.enterContext(new TopCallableContext(null, function));
+            topContext.enterContext(new TopCallableContext(function));
         }
     }
 
