@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 public class TopDownMathematicalDeductionRule extends NormalRule {
     private static Function<List<Operable>, List<Operable>> OPERABLE_FUNCTION = operables -> {
-        return operables.get(0).equals(Operable.INT) ? Collections.singletonList(Operable.INT) : null;
+        return operables.get(0).equals(Operable.INT) ? Arrays.asList(Operable.INT, Operable.INT) : null;
     };
 
     public TopDownMathematicalDeductionRule(Typable topTypable, Typable typable1, Typable typable2) {
