@@ -18,7 +18,7 @@ public class ListType extends NormalType {
             return;
         }
         ListType innerListType = (ListType) innerType;
-        power = innerListType.getPower();
+        power = innerListType.getPower() + 1;
         deepestCustomTypeName = innerListType.getDeepestCustomTypeName();
     }
 

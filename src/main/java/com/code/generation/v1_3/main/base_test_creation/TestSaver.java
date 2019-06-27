@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class TestSaver {
 
-    private static final String PREFIX = "success/many_statements/test_equals_and_toString";
-    private static final String CODE_NAME = "equals_on_ints";
+    private static final String PREFIX = "success/many_statements/list_manipulation";
+    private static final String CODE_NAME = "call_constructor_power_3_String";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});

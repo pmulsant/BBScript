@@ -275,6 +275,9 @@ public class Type {
 
     @Override
     public String toString() {
+        if(isList()){
+            return "list<" + innerTypable.getType().toString()+ ">";
+        }
         return "type : " + (simpleName != null ? (simpleName.equals(StandardKnowledges.NULL_KEY_WORD) ? "the null type" : simpleName) : "unknown");
     }
 
