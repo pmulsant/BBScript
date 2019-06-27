@@ -120,12 +120,12 @@ public class CompilerVisitor extends GrammarBaseVisitor<CompiledResult> {
 
     @Override
     public InnerStatementResult visitIntExpr(GrammarParser.IntExprContext ctx) {
-        return makeBasicInnerStatementResult(ctx.INT().getText());
+        return makeBasicInnerStatementResult((ctx.SUB() != null ? "-" : "") + ctx.INT().getText());
     }
 
     @Override
     public InnerStatementResult visitFloatExpr(GrammarParser.FloatExprContext ctx) {
-        return makeBasicInnerStatementResult(ctx.FLOAT().getText());
+        return makeBasicInnerStatementResult((ctx.SUB() != null ? "-" : "") + ctx.FLOAT().getText());
     }
 
     @Override

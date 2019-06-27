@@ -10,7 +10,7 @@ import java.io.IOException;
 public class TestSaver {
 
     private static final String PREFIX = "success/rules_tests/simple_down_top_inference";
-    private static final String CODE_NAME = "add_two_ints";
+    private static final String CODE_NAME = "add_an_int_and_a_float";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});
