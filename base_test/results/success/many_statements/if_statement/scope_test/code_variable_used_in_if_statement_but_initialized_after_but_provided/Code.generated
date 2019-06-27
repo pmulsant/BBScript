@@ -1,0 +1,6 @@
+if(true) {
+} else if(false) {
+	int $a;
+	$a;
+}
+$a = 5;

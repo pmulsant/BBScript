@@ -1,0 +1,6 @@
+if(true) {
+	int a;
+	a = 5;
+}
+float a;
+a = 3.2;

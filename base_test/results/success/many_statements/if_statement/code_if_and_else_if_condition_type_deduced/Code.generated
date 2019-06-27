@@ -1,0 +1,5 @@
+boolean $a;
+boolean $b;
+if(!$a) {
+} else if($b) {
+}

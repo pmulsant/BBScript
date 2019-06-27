@@ -1,0 +1,7 @@
+int $a;
+$a;
+if(true) {
+	if(false) {
+		$a = 6;
+	}
+}

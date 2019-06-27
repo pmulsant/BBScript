@@ -86,12 +86,12 @@ public class CompilerVisitor extends GrammarBaseVisitor<CompiledResult> {
 
     @Override
     public InnerStatementResult visitElseIfChunk(GrammarParser.ElseIfChunkContext ctx) {
-        return manageConditionChunk("if else", ctx.expr(), ctx.runnableScope());
+        return manageConditionChunk(" else if", ctx.expr(), ctx.runnableScope());
     }
 
     @Override
     public CompiledResult visitElseChunk(GrammarParser.ElseChunkContext ctx) {
-        return manageConditionChunk("else", null, ctx.runnableScope());
+        return manageConditionChunk(" else", null, ctx.runnableScope());
     }
 
     @Override
@@ -351,7 +351,7 @@ public class CompilerVisitor extends GrammarBaseVisitor<CompiledResult> {
             innerExpressionResult = (InnerStatementResult) visit(exprContext);
         }
         StatementResult runnableScopeResult = (StatementResult) visit(runnableScopeContext);
-        InlineChunk headerBeginningChunk = new InlineChunk(exprContext == null ? conditionKeyWord + "{" : conditionKeyWord + "(");
+        InlineChunk headerBeginningChunk = new InlineChunk(exprContext == null ? conditionKeyWord + " {" : conditionKeyWord + "(");
         InlineChunk headerEndChunk = new InlineChunk(exprContext == null ? "" : ") {" );
         List<IChunk> chunks = new LinkedList<>();
         chunks.add(headerBeginningChunk);

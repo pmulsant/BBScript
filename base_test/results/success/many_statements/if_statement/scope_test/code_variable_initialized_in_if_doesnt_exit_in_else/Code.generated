@@ -1,0 +1,7 @@
+if(true) {
+	int a;
+	a = 5;
+} else {
+	String a;
+	a = "ok";
+}
