@@ -1,0 +1,9 @@
+class MyType {
+	MyType() {
+	}
+	
+	int m() {
+		return 5;
+	}
+	
+}

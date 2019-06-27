@@ -1,0 +1,4 @@
+List<int> aList;
+List<int> $list;
+aList = $list.map(item -> item * 5);
+aList.get(1).equals(30);

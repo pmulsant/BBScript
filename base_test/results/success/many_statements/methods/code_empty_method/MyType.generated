@@ -1,0 +1,8 @@
+class MyType {
+	MyType() {
+	}
+	
+	void m() {
+	}
+	
+}

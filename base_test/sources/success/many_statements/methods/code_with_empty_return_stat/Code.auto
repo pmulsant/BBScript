@@ -1,0 +1,3 @@
+new MyType(){}.m(){
+    return;
+};

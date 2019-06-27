@@ -17,6 +17,7 @@ import com.code.generation.v1_3.exception.for_type_checker.CantBeProvideForParam
 import com.code.generation.v1_3.exception.for_type_checker.CantBeReturnedTypeException;
 import com.code.generation.v1_3.exception.for_type_checker.CantHaveLambdaHereException;
 import com.code.generation.v1_3.exception.for_type_checker.IsNotNormalTypeException;
+import com.code.generation.v1_3.exception.for_type_checker.for_interruptions.CantContinueAfterAnAlwaysInterruptStatement;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.code.generation.v1_3.util.AccessibleTopContext;
 import com.code.generation.v1_3.visitors.after_deduced.result.ExpressionResult;
@@ -279,7 +280,7 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
         boolean isAlwaysThrowsOrReturn = false;
         for (GrammarParser.StatContext statContext : ctx.stat()) {
             if (!canContinue) {
-                throw new IllegalStateException("error can't continue after a stat which always interrupt");
+                throw new CantContinueAfterAnAlwaysInterruptStatement();
             }
             RunnableScopeOrStatResult runnableScopeOrStatResult = (RunnableScopeOrStatResult) visit(statContext);
             interruptions.addAll(runnableScopeOrStatResult.getInterruptions());

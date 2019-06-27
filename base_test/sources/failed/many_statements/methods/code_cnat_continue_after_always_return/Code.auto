@@ -1,0 +1,4 @@
+a = new MyType(){}.m(){
+    return 1;
+    return 2;
+};
