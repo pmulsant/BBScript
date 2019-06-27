@@ -346,15 +346,22 @@ public class CompilerVisitor extends GrammarBaseVisitor<CompiledResult> {
     }
 
     private InnerStatementResult manageConditionChunk(String conditionKeyWord, GrammarParser.ExprContext exprContext, GrammarParser.RunnableScopeContext runnableScopeContext){
-        InnerStatementResult innerExpressionResult = (InnerStatementResult) visit(exprContext);
+        InnerStatementResult innerExpressionResult = null;
+        if(exprContext != null){
+            innerExpressionResult = (InnerStatementResult) visit(exprContext);
+        }
         StatementResult runnableScopeResult = (StatementResult) visit(runnableScopeContext);
         InlineChunk headerBeginningChunk = new InlineChunk(exprContext == null ? conditionKeyWord + "{" : conditionKeyWord + "(");
         InlineChunk headerEndChunk = new InlineChunk(exprContext == null ? "" : ") {" );
-        return InnerStatementResult.getInstance(Arrays.asList(
-                headerBeginningChunk, innerExpressionResult, headerEndChunk,
-                new BreakLineChunk(runnableScopeResult),
-                new InlineChunk("}")
-        ));
+        List<IChunk> chunks = new LinkedList<>();
+        chunks.add(headerBeginningChunk);
+        if(innerExpressionResult != null){
+            chunks.add(innerExpressionResult);
+        }
+        chunks.add(headerEndChunk);
+        chunks.add(new BreakLineChunk(runnableScopeResult));
+        chunks.add(new InlineChunk("}"));
+        return InnerStatementResult.getInstance(chunks);
     }
 
     private StatementResult manageReturnOrThrowStat(boolean isReturnStat, GrammarParser.ExprContext expr) {
