@@ -1,0 +1,4 @@
+float a;
+a = 7.2;
+float $b;
+a = $b * 3;

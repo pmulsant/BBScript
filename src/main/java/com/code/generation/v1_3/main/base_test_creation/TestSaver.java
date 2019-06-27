@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class TestSaver {
 
-    private static final String PREFIX = "success/rules_tests/top_down_ints";
-    private static final String CODE_NAME = "int_variable_init_with_unknown_add_unknown_different_variables";
+    private static final String PREFIX = "success/rules_tests/special_rules";
+    private static final String CODE_NAME = "string_variable_init_with_a_float_and_unknown";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});

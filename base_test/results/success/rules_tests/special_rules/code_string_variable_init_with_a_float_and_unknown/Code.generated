@@ -1,0 +1,8 @@
+float $a;
+float $b;
+$a <= $b;
+String c;
+String $d;
+c = $a + $d;
+c = "a string";
+$a = $b = 3.7;

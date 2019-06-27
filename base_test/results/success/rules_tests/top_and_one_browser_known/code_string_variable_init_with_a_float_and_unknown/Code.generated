@@ -1,0 +1,4 @@
+String a;
+a = "a string";
+String $b;
+a = 3.6 + $b;

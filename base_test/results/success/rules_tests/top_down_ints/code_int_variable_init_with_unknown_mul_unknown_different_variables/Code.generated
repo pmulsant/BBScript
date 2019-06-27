@@ -1,0 +1,5 @@
+int c;
+c = 2;
+int $a;
+int $b;
+c = $a * $b;
