@@ -14,7 +14,7 @@ public class TopOneBrowserIsNumberMathematicalDeductionRule extends SpecialRule 
     private static final Function<List<Type>, List<Operable>> OPERABLE_FUNCTION = types -> {
         Type topType = types.get(0);
         Type childType = types.get(1);
-        boolean isNotAString = childType.isAppearOnNumberSpecificOperation();
+        boolean isNotAString = childType.isAppearInNumberSpecificOperation();
         String topTypeName = topType.getSimpleName();
         if(topTypeName == null){
             return null;

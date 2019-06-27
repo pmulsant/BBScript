@@ -261,7 +261,7 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
 
     private void assertIsOperable(StrongType strongType) {
         if (!(strongType instanceof CustomType) || !((CustomType) strongType).isOperable()) {
-            throw new NonOperableException(strongType + " is not operable");
+            throw new NonOperableException("type " + strongType + " is not operable");
         }
     }
 

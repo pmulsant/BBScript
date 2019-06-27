@@ -1,1 +1,1 @@
-com.code.generation.v1_3.exception.NonOperableException: expected number
+com.code.generation.v1_3.exception.rules.NotANumberException: type : boolean is not a number

@@ -43,6 +43,12 @@ public class TypeSet {
         }
         StandardType standardType = getNonNullStandardType();
         if (standardType != null) {
+            if(isAppearInNumberSpecificOperation()){
+                standardType.setAppearInNumberSpecificOperation();
+            }
+            if(isOperable()){
+                standardType.setOperable();
+            }
             assertStandardTypeIsRespected(standardType);
             cleanTypeSetWithNewType(standardType);
             return Collections.EMPTY_LIST;
@@ -167,18 +173,30 @@ public class TypeSet {
     }
 
     private void fusionAppearance(Type newType) {
+        if(isAppearInNumberSpecificOperation()){
+            newType.setAppearInNumberSpecificOperation();
+        }
+        if(isOperable()){
+            newType.setOperable();
+        }
+    }
+
+    private boolean isAppearInNumberSpecificOperation(){
         for (Type type : types) {
-            if (type.isAppearOnNumberSpecificOperation()) {
-                newType.setAppearOnNumberSpecificOperation();
-                break;
+            if (type.isAppearInNumberSpecificOperation()) {
+                return true;
             }
         }
+        return false;
+    }
+
+    private boolean isOperable(){
         for (Type type : types) {
-            if (type.isAppearOnNumberOrStringOperation()) {
-                newType.setAppearOnNumberOrStringOperation();
-                break;
+            if (type.isOperable()) {
+                return true;
             }
         }
+        return false;
     }
 
     private FusionDeclaration fusionList(Type newType) {

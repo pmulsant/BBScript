@@ -10,4 +10,9 @@ public class VoidStandardType extends StandardType {
         super(standardTypeDirectory, typeInferenceMotor, StandardKnowledges.VOID_TYPE_NAME);
         isVoid = true;
     }
+
+    @Override
+    public void checkDeducedAndCoherence() {
+        checkAppearanceCoherenceWithSpecialType();
+    }
 }

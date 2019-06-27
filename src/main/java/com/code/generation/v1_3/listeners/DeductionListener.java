@@ -4,7 +4,6 @@ import com.code.generation.v1_3.elements.symbols.Variable;
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.elements.type.Type;
 import com.code.generation.v1_3.elements.type.custom.Attribute;
-import com.code.generation.v1_3.elements.type.custom.callables.Callable;
 import com.code.generation.v1_3.elements.type.custom.callables.ICallable;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.*;
 import com.code.generation.v1_3.elements.type.standard.Operable;
@@ -194,11 +193,11 @@ public class DeductionListener extends GrammarBaseListener {
     @Override
     public void enterMulExpr(GrammarParser.MulExprContext ctx) {
         Typable topTypable = typeInferenceMotor.getTypableExpressionFromExpr(ctx, false);
-        topTypable.getType().setAppearOnNumberSpecificOperation();
+        topTypable.getType().setAppearInNumberSpecificOperation();
         Typable typable1 = typeInferenceMotor.getTypableExpressionFromExpr(ctx.op1, false);
-        typable1.getType().setAppearOnNumberSpecificOperation();
+        typable1.getType().setAppearInNumberSpecificOperation();
         Typable typable2 = typeInferenceMotor.getTypableExpressionFromExpr(ctx.op2, false);
-        typable2.getType().setAppearOnNumberSpecificOperation();
+        typable2.getType().setAppearInNumberSpecificOperation();
         typeInferenceMotor.addRule(new TopDownMathematicalDeductionRule(topTypable, typable1, typable2));
         typeInferenceMotor.addRule(new DownTopMulMathematicalDeductionRule(typable1, typable2, topTypable));
         typeInferenceMotor.addRule(new OneDownTopMulMathematicalDeductionRule(typable1, topTypable));
@@ -210,11 +209,18 @@ public class DeductionListener extends GrammarBaseListener {
     @Override
     public void enterAddExpr(GrammarParser.AddExprContext ctx) {
         Typable topTypable = typeInferenceMotor.getTypableExpressionFromExpr(ctx, false);
-        topTypable.getType().setAppearOnNumberOrStringOperation();
         Typable typable1 = typeInferenceMotor.getTypableExpressionFromExpr(ctx.op1, false);
-        typable1.getType().setAppearOnNumberOrStringOperation();
         Typable typable2 = typeInferenceMotor.getTypableExpressionFromExpr(ctx.op2, false);
-        typable2.getType().setAppearOnNumberOrStringOperation();
+
+        if(ctx.SUB() != null){
+            topTypable.getType().setAppearInNumberSpecificOperation();
+            typable1.getType().setAppearInNumberSpecificOperation();
+            typable2.getType().setAppearInNumberSpecificOperation();
+        } else {
+            topTypable.getType().setOperable();
+            typable1.getType().setOperable();
+            typable2.getType().setOperable();
+        }
 
         // add normal rules
         typeInferenceMotor.addRule(new TopDownMathematicalDeductionRule(topTypable, typable1, typable2));
@@ -232,8 +238,8 @@ public class DeductionListener extends GrammarBaseListener {
     @Override
     public void enterCompExpr(GrammarParser.CompExprContext ctx) {
         linkExpressionToBooleanStandardType(ctx);
-        typeInferenceMotor.getTypableExpressionFromExpr(ctx.op1, false).getType().setAppearOnNumberSpecificOperation();
-        typeInferenceMotor.getTypableExpressionFromExpr(ctx.op2, false).getType().setAppearOnNumberSpecificOperation();
+        typeInferenceMotor.getTypableExpressionFromExpr(ctx.op1, false).getType().setAppearInNumberSpecificOperation();
+        typeInferenceMotor.getTypableExpressionFromExpr(ctx.op2, false).getType().setAppearInNumberSpecificOperation();
     }
 
     @Override

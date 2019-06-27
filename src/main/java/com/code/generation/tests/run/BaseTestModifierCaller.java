@@ -13,8 +13,8 @@ public class BaseTestModifierCaller {
         BaseTestModifier.main(new String[]{
                 "rebuild",
 
-                "success/rules_tests/simple_down_top_inference",
-                "add_an_int_and_a_float"});
+                "failed/rules_tests/simple_down_top_inference",
+                "add_a_string_and_a_regex"});
         /*BaseTestModifier.main(new String[]{"replace",
 
                 "success/simple_statement/list_manipulation/with_function",

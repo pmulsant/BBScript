@@ -60,6 +60,7 @@ public abstract class StandardType extends Type {
 
     @Override
     public void checkDeducedAndCoherence() {
+        checkAppearanceCoherenceWithSimpleName();
     }
 
     public void checkIsRespectedByTypeAndReplace(Type type){

@@ -8,7 +8,9 @@ import com.code.generation.v1_3.elements.type.standard.Operable;
 import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
 import com.code.generation.v1_3.elements.type.standard.StandardType;
 import com.code.generation.v1_3.exception.CantFindTypeException;
+import com.code.generation.v1_3.exception.NonOperableException;
 import com.code.generation.v1_3.exception.TypeConflictException;
+import com.code.generation.v1_3.exception.rules.NotANumberException;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.code.generation.v1_3.inference.fusion.TypeSet;
 import com.generated.GrammarParser;
@@ -24,8 +26,8 @@ public class Type {
     private List<Typable> containerTypables = new LinkedList<>();
 
     protected Boolean isVoid;
-    private boolean appearOnNumberSpecificOperation;
-    private boolean appearOnNumberOrStringOperation;
+    private boolean appearInNumberSpecificOperation;
+    private boolean isOperable;
 
     protected Typable innerTypable;
     protected Lambda lambda;
@@ -141,20 +143,20 @@ public class Type {
         return method;
     }
 
-    public void setAppearOnNumberSpecificOperation() {
-        this.appearOnNumberSpecificOperation = true;
+    public void setAppearInNumberSpecificOperation() {
+        this.appearInNumberSpecificOperation = true;
     }
 
-    public boolean isAppearOnNumberSpecificOperation() {
-        return appearOnNumberSpecificOperation;
+    public boolean isAppearInNumberSpecificOperation() {
+        return appearInNumberSpecificOperation;
     }
 
-    public void setAppearOnNumberOrStringOperation() {
-        this.appearOnNumberOrStringOperation = true;
+    public void setOperable() {
+        this.isOperable = true;
     }
 
-    public boolean isAppearOnNumberOrStringOperation() {
-        return appearOnNumberOrStringOperation;
+    public boolean isOperable() {
+        return isOperable;
     }
 
     public String getSimpleName() {
@@ -255,22 +257,38 @@ public class Type {
             throw new TypeConflictException();
         }
         if (specialTypesNumber == 1) {
-            if (standardType != null) {
-                standardType.checkIsRespectedByTypeAndReplace(this);
-                return;
-            }
+            checkAppearanceCoherenceWithSpecialType();
             isDeducedAndCoherent = true;
             return;
         }
         if (simpleName == null) {
             throw new CantFindTypeException(this);
         }
+        checkAppearanceCoherenceWithSimpleName();
         standardType = typeInferenceMotor.getStandardTypeDirectory().getStandardType(simpleName);
         if (standardType != null) {
             standardType.checkIsRespectedByTypeAndReplace(this);
             return;
         }
         isDeducedAndCoherent = true;
+    }
+
+    protected void checkAppearanceCoherenceWithSpecialType(){
+        if(isAppearInNumberSpecificOperation()){
+            throw new NotANumberException(this);
+        }
+        if(isOperable()){
+            throw new NonOperableException(this);
+        }
+    }
+
+    protected void checkAppearanceCoherenceWithSimpleName(){
+        if(isAppearInNumberSpecificOperation() && !simpleName.equals(StandardKnowledges.INT_TYPE_NAME) && !simpleName.equals(StandardKnowledges.FLOAT_TYPE_NAME)){
+            throw new NotANumberException(this);
+        }
+        if(isOperable() && Operable.getFromName(simpleName) == null){
+            throw new NonOperableException(this);
+        }
     }
 
     @Override
