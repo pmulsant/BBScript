@@ -15,6 +15,7 @@ import com.code.generation.v1_3.exception.NonAssignableExpression;
 import com.code.generation.v1_3.exception.NonOperableException;
 import com.code.generation.v1_3.exception.for_type_checker.CantBeProvideForParameterException;
 import com.code.generation.v1_3.exception.for_type_checker.CantBeReturnedTypeException;
+import com.code.generation.v1_3.exception.for_type_checker.CantHaveLambdaHereException;
 import com.code.generation.v1_3.exception.for_type_checker.IsNotNormalTypeException;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.code.generation.v1_3.util.AccessibleTopContext;
@@ -241,7 +242,7 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
     public Result visitLambdaExpr(GrammarParser.LambdaExprContext ctx) {
         LambdaType expectedLambdaType = expectedLambdaContext.getCurrentContext();
         if (expectedLambdaType == null) {
-            throw new IllegalStateException("unexpected lambda here");
+            throw new CantHaveLambdaHereException(callableContext.getCurrentContext());
         }
         CallableDefinition callableDefinition;
         if (ctx.lambdaProcess().expr() != null) {
@@ -394,7 +395,7 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
             if (!(topType instanceof NormalType)) {
                 throw new IsNotNormalTypeException(topType);
             }
-            List<CanBeProvideForParameter> arguments = getArguments(argsContext);
+            List<CanBeProvideForParameter> arguments = getArguments(argsContext, false);
             constructor = genericConstructor.makeStrongConstructor((NormalType) topType, arguments);
         } else {
             constructor = topNormalType.getConstructors().get(paramsNumber);
@@ -423,7 +424,7 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
             if (!(strongType instanceof CanBeReturnedType)) {
                 throw new CantBeReturnedTypeException(strongType);
             }
-            List<CanBeProvideForParameter> arguments = getArguments(argsContext);
+            List<CanBeProvideForParameter> arguments = getArguments(argsContext, true);
             method = genericMethod.makeStrongMethod(innerNormalType, (CanBeReturnedType) strongType, arguments);
         } else {
             method = innerNormalType.getMethods().get(methodName);
@@ -445,7 +446,7 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
             if (!(returned instanceof CanBeReturnedType)) {
                 throw new CantBeReturnedTypeException(returned);
             }
-            List<CanBeProvideForParameter> arguments = getArguments(argsContext);
+            List<CanBeProvideForParameter> arguments = getArguments(argsContext, false);
             function = standardFunction.makeStrongFunction((CanBeReturnedType) returned, arguments);
         } else {
             function = strongTypeDirectory.getFunction(functionName);
@@ -457,9 +458,16 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
         return manageCallable(topContext, function, function.getReturnedType(), argsContext, runnableScopeContext);
     }
 
-    private List<CanBeProvideForParameter> getArguments(GrammarParser.ArgsContext argsContext) {
+    private List<CanBeProvideForParameter> getArguments(GrammarParser.ArgsContext argsContext, boolean canHaveLambdaParameter) {
         List<CanBeProvideForParameter> arguments = new ArrayList<>(argsContext.arg().size());
         for (GrammarParser.ArgContext argContext : argsContext.arg()) {
+            if(canHaveLambdaParameter){
+                StrongType strongType = strongTypeDirectory.getStrongType(argContext.expr());
+                if(strongType instanceof LambdaType) {
+                    arguments.add((LambdaType) strongType);
+                    continue;
+                }
+            }
             StrongType argument = ((ExpressionResult) visit(argContext.expr())).getStrongType();
             if (!(argument instanceof CanBeProvideForParameter)) {
                 throw new CantBeProvideForParameterException(argument);
@@ -477,7 +485,7 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
         int index = 0;
         for (GrammarParser.ArgContext argContext : argsContext.arg()) {
             Parameter parameter = callable.getParameters().get(index);
-            StrongType argType = null;
+            StrongType argType;
             if (parameter.getType() instanceof LambdaType) {
                 expectedLambdaContext.enterContext((LambdaType) parameter.getType());
                 argType = ((ExpressionResult) visit(argContext.expr())).getStrongType();

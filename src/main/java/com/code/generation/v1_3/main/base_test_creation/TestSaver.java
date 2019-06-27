@@ -12,7 +12,7 @@ public class TestSaver {
     //private static final String CODE_NAME = "add_a_int_and_a_casted_int_to_list";
 
     private static final String PREFIX = "success/many_statements/list_manipulation";
-    private static final String CODE_NAME = "list_add_and_get";
+    private static final String CODE_NAME = "list_filter_with_identity_lambda";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});

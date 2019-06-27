@@ -7,6 +7,8 @@ import com.code.generation.v1_3.elements.strong_type.custom.Parameter;
 import com.code.generation.v1_3.exception.ManyDefinitionForSameCallableFoundException;
 import com.code.generation.v1_3.exception.NotAlwaysReturnException;
 import com.code.generation.v1_3.exception.WrongParamNumberException;
+import com.code.generation.v1_3.exception.for_type_checker.CantBeReturnedTypeException;
+import com.code.generation.v1_3.visitors.after_deduced.result.ExpressionResult;
 import com.code.generation.v1_3.visitors.after_deduced.result.RunnableScopeOrStatResult;
 
 import java.util.List;
@@ -50,13 +52,23 @@ public abstract class Callable implements ICallable {
 
     @Override
     public final void checkReturnCompatibility(CallableDefinition callableDefinition) {
-        RunnableScopeOrStatResult runnableScopeOrStatResult = (RunnableScopeOrStatResult) callableDefinition.getTypeCheckerVisitor().visit(callableDefinition.getRunnableScopeContext());
-        CanAppearInReturnStat canAppearInReturnStat = runnableScopeOrStatResult.getReturnInterruption() != null ? runnableScopeOrStatResult.getReturnInterruption().getCanAppearInReturnStat() : null;
+        CanAppearInReturnStat canAppearInReturnStat;
+        RunnableScopeOrStatResult runnableScopeOrStatResult = null;
+        if(callableDefinition.getRunnableScopeContext() != null) {
+            runnableScopeOrStatResult = (RunnableScopeOrStatResult) callableDefinition.getTypeCheckerVisitor().visit(callableDefinition.getRunnableScopeContext());
+            canAppearInReturnStat = runnableScopeOrStatResult.getReturnInterruption() != null ? runnableScopeOrStatResult.getReturnInterruption().getCanAppearInReturnStat() : null;
+        } else {
+            ExpressionResult expressionResult = (ExpressionResult) callableDefinition.getTypeCheckerVisitor().visit(callableDefinition.getExprContext());
+            if(!(expressionResult.getStrongType() instanceof CanAppearInReturnStat)){
+                throw new CantBeReturnedTypeException(expressionResult.getStrongType());
+            }
+            canAppearInReturnStat = (CanAppearInReturnStat) expressionResult.getStrongType();
+        }
         if (canAppearInReturnStat == null || canAppearInReturnStat.isVoid()) {
             checkReturnCompatibility(strongTypeDirectory.getVoidStrongType());
             return;
         }
-        if (!runnableScopeOrStatResult.isAlwaysThrowsOrReturn()) {
+        if (runnableScopeOrStatResult != null && !runnableScopeOrStatResult.isAlwaysThrowsOrReturn()) {
             throw new NotAlwaysReturnException(this);
         }
         checkReturnCompatibility(canAppearInReturnStat);

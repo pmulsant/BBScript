@@ -91,7 +91,8 @@ public class FusionMotor {
         }
         Set<FusionDeclaration> result = new HashSet<>();
         for (TypeSet typeSet : typeSets) {
-            result.addAll(typeSet.fusionAndClean());
+            List<FusionDeclaration> newFusionDeclarations = typeSet.fusionAndClean();
+            result.addAll(newFusionDeclarations);
         }
         cleanFusionDeclarationWithOneElementOrLess(result);
         return result;

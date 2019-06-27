@@ -3,6 +3,7 @@ package com.code.generation.v1_3.inference.fusion;
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.elements.type.Type;
 import com.code.generation.v1_3.elements.type.custom.Attribute;
+import com.code.generation.v1_3.elements.type.custom.callables.ICallable;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.*;
 import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
 import com.code.generation.v1_3.elements.type.standard.StandardType;
@@ -159,8 +160,7 @@ public class TypeSet {
             }
         }
         if (!lambdas.isEmpty()) {
-            Lambda firstLambda = lambdas.getFirst();
-            Lambda newLambda = newType.setLambda(firstLambda.getParamsNumber());
+            Lambda newLambda = newType.setLambda(fusionParamsNumber(null, lambdas));
             result.addAll(fusionCanReturns(newLambda, lambdas));
         }
         return result;
@@ -256,8 +256,8 @@ public class TypeSet {
         return result;
     }
 
-    private int fusionParamsNumber(String methodName, List<Method> methods) {
-        Set<Integer> paramsNumbers = methods.stream().map(method -> method.getParamsNumber()).collect(Collectors.toSet());
+    private int fusionParamsNumber(String methodName, List<? extends ICallable> callables) {
+        Set<Integer> paramsNumbers = callables.stream().map(method -> method.getParamsNumber()).collect(Collectors.toSet());
         if (paramsNumbers.size() != 1) {
             throw new WrongParamNumberException("more than one params number possibilities for callable " + methodName);
         }

@@ -4,6 +4,7 @@ import com.code.generation.v1_3.elements.symbols.Variable;
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.elements.type.Type;
 import com.code.generation.v1_3.elements.type.custom.Attribute;
+import com.code.generation.v1_3.elements.type.custom.callables.Callable;
 import com.code.generation.v1_3.elements.type.custom.callables.ICallable;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.*;
 import com.code.generation.v1_3.elements.type.standard.Operable;
@@ -17,6 +18,9 @@ import com.code.generation.v1_3.inference.rules.normals.*;
 import com.code.generation.v1_3.util.AccessibleTopContext;
 import com.generated.GrammarBaseListener;
 import com.generated.GrammarParser;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DeductionListener extends GrammarBaseListener {
     private TypeInferenceMotor typeInferenceMotor;
@@ -278,6 +282,7 @@ public class DeductionListener extends GrammarBaseListener {
     public void enterLambdaExpr(GrammarParser.LambdaExprContext ctx) {
         Typable topTypable = typeInferenceMotor.getTypableExpressionFromExpr(ctx, false);
         Lambda lambda = topTypable.getType().setLambda(ctx.lambdaArg().complexId().size());
+        bindArgsExprToParameters(lambda, null, ctx.lambdaArg().complexId());
         topContext.enterContext(new TopCallableContext(null, lambda));
         GrammarParser.ExprContext expr = ctx.lambdaProcess().expr();
         if (expr != null) {
@@ -357,20 +362,30 @@ public class DeductionListener extends GrammarBaseListener {
     }
 
     public void bindArgsExprToParameters(ISimpleCallable simpleCallable, GrammarParser.ArgsContext argsContext) {
-        int paramsNumber = argsContext.arg().size();
+
+        List<GrammarParser.ComplexIdContext> complexIdContexts = argsContext.arg().stream().map(argContext -> argContext.complexId()).collect(Collectors.toList());
+        List<GrammarParser.ExprContext> exprContexts = argsContext.arg().stream().map(argContext -> argContext.expr()).collect(Collectors.toList());
+        bindArgsExprToParameters(simpleCallable, exprContexts, complexIdContexts);
+    }
+
+    private void bindArgsExprToParameters(ISimpleCallable callable, List<GrammarParser.ExprContext> exprContexts, List<GrammarParser.ComplexIdContext> complexIdContexts){
+        int paramsNumber = complexIdContexts.size();
         for (int index = 0; index < paramsNumber; index++) {
-            GrammarParser.ArgContext argContext = argsContext.arg().get(index);
-            Parameter parameter = simpleCallable.getParameter(index);
-            if (argContext.complexId() != null) { // there is a Variable
-                parameter.setName(argContext.complexId().ID().getText());
-                Variable variable = typeInferenceMotor.getVariableParameter(argContext.complexId());
+            Parameter parameter = callable.getParameter(index);
+            GrammarParser.ComplexIdContext complexIdContext = complexIdContexts.get(index);
+            if (complexIdContext != null) { // there is a Variable
+                parameter.setName(complexIdContext.ID().getText());
+                Variable variable = typeInferenceMotor.getVariableParameter(complexIdContext);
                 typeInferenceMotor.addFusionOfTypesDeclaration(variable, parameter);
-                if (argContext.complexId().type() != null) {
-                    parameter.getType().setName(argContext.complexId().type());
+                if (complexIdContext.type() != null) {
+                    parameter.getType().setName(complexIdContext.type());
                 }
             }
-            Typable argumentTypable = typeInferenceMotor.getTypableExpressionFromExpr(argContext.expr(), false);
-            typeInferenceMotor.addFusionOfTypesDeclaration(argumentTypable, parameter);
+            GrammarParser.ExprContext exprContext = exprContexts == null ? null : exprContexts.get(index);
+            if(exprContext != null) {
+                Typable argumentTypable = typeInferenceMotor.getTypableExpressionFromExpr(exprContext, false);
+                typeInferenceMotor.addFusionOfTypesDeclaration(argumentTypable, parameter);
+            }
         }
     }
 
