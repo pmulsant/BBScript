@@ -1,0 +1,5 @@
+function void func () {
+	int a;
+	a = 0;
+}
+

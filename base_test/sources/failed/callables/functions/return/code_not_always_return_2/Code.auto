@@ -1,0 +1,8 @@
+a = func(){
+    if(true){
+        return 1;
+    } else if(true){
+    } else {
+        return 3;
+    }
+};

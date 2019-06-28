@@ -1,0 +1,4 @@
+function void func () {
+	throw 1;
+}
+

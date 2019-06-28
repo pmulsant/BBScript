@@ -1,0 +1,3 @@
+float a;
+String $b;
+a = parseFloat($b);

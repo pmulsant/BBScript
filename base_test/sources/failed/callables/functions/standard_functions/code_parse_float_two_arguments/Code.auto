@@ -1,0 +1,1 @@
+a = parseFloat("ok", "ok");

@@ -1,0 +1,10 @@
+function int func () {
+	if(true) {
+		return 1;
+	} else if(true) {
+		return 2;
+	} else {
+		return 3;
+	}
+}
+

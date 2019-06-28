@@ -1,0 +1,1 @@
+com.code.generation.v1_3.exception.ManyDefinitionForSameCallableFoundException: function void func()

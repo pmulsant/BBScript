@@ -1,0 +1,6 @@
+func(){
+    func2();
+};
+func2(){
+    func();
+};

@@ -1,0 +1,1 @@
+com.code.generation.v1_3.exception.for_type_checker.for_interruptions.CantContinueAfterAnAlwaysInterruptStatement: error can't continue after a stat which always interrupt

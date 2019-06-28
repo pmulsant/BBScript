@@ -1,0 +1,7 @@
+function int func () {
+	if(true) {
+		return 1;
+	}
+	throw 1;
+}
+

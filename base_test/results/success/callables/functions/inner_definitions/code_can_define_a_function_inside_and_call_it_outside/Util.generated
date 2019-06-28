@@ -1,0 +1,7 @@
+function void func () {
+	func2();
+}
+
+function void func2 () {
+}
+
