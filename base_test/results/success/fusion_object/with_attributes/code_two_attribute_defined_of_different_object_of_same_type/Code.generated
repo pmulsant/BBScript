@@ -1,0 +1,5 @@
+MyObject a;
+a = new MyObject();
+MyObject $b;
+$b.attr2 = 0.2;
+a.equals($b);

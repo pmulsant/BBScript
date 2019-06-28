@@ -19,7 +19,7 @@ public class RemoveByIndexGenericMethod extends GenericMethod {
     public static final String METHOD_NAME = "removeByIndex";
 
     public RemoveByIndexGenericMethod(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor) {
-        super(standardTypeDirectory, typeInferenceMotor, METHOD_NAME, null, standardTypeDirectory.getStandardType(StandardKnowledges.VOID_TYPE_NAME), Collections.singletonList(standardTypeDirectory.getStandardType(StandardKnowledges.INT_TYPE_NAME)));
+        super(standardTypeDirectory, typeInferenceMotor, false, METHOD_NAME, null, standardTypeDirectory.getStandardType(StandardKnowledges.VOID_TYPE_NAME), Collections.singletonList(standardTypeDirectory.getStandardType(StandardKnowledges.INT_TYPE_NAME)));
     }
 
     @Override
@@ -32,6 +32,6 @@ public class RemoveByIndexGenericMethod extends GenericMethod {
         StrongTypeDirectory strongTypeDirectory = innerNormalType.getStrongTypeDirectory();
         CustomType intType = strongTypeDirectory.getStrongType(Operable.INT);
         Parameter parameter = new Parameter(null, intType);
-        return new Method(innerNormalType.getStrongTypeDirectory(), innerNormalType, getName(), strongTypeDirectory.getVoidStrongType(), Collections.singletonList(parameter));
+        return new Method(innerNormalType.getStrongTypeDirectory(), true, innerNormalType, getName(), strongTypeDirectory.getVoidStrongType(), Collections.singletonList(parameter));
     }
 }

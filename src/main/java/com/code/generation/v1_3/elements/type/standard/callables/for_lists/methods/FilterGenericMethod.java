@@ -20,7 +20,7 @@ public class FilterGenericMethod extends GenericMethod {
     public static final String METHOD_NAME = "filter";
 
     public FilterGenericMethod(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor) {
-        super(standardTypeDirectory, typeInferenceMotor, METHOD_NAME, null, null, Collections.EMPTY_LIST);
+        super(standardTypeDirectory, typeInferenceMotor, false, METHOD_NAME, null, null, Collections.EMPTY_LIST);
     }
 
     @Override
@@ -43,6 +43,6 @@ public class FilterGenericMethod extends GenericMethod {
         NormalType lambdaParameter = ((ListType) innerNormalType).getInnerType();
         LambdaType lambdaType = new LambdaType(strongTypeDirectory, strongTypeDirectory.getStrongType(Operable.BOOLEAN), Collections.singletonList(lambdaParameter));
         Parameter finalParameter = new Parameter(null, lambdaType);
-        return new Method(innerNormalType.getStrongTypeDirectory(), innerNormalType, getName(), innerNormalType, Collections.singletonList(finalParameter));
+        return new Method(innerNormalType.getStrongTypeDirectory(), true, innerNormalType, getName(), innerNormalType, Collections.singletonList(finalParameter));
     }
 }

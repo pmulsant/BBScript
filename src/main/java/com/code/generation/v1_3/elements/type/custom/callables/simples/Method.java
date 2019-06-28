@@ -8,6 +8,7 @@ import com.code.generation.v1_3.inference.TypeInferenceMotor;
 public class Method extends SimpleCallable implements LinkedToType, CanReturn, IMethod {
     private String name;
     protected ReturnedTypable returnedTypable;
+    private boolean isObjectMethod;
 
     public Method(TypeInferenceMotor typeInferenceMotor, Type type, String name, int paramsNumber) {
         super(typeInferenceMotor, paramsNumber);
@@ -27,5 +28,13 @@ public class Method extends SimpleCallable implements LinkedToType, CanReturn, I
     @Override
     public String toString() {
         return "method " + name;
+    }
+
+    public void setObjectMethod() {
+        isObjectMethod = true;
+    }
+
+    public boolean isObjectMethod() {
+        return isObjectMethod;
     }
 }

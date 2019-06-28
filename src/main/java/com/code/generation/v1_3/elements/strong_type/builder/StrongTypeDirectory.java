@@ -199,7 +199,9 @@ public class StrongTypeDirectory {
                 assertGotCallableDefinition(constructor);
             }
             for (Method method : customType.getMethods().values()) {
-                assertGotCallableDefinition(method);
+                if(!method.isStandard()) {
+                    assertGotCallableDefinition(method);
+                }
             }
         }
     }

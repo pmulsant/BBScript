@@ -17,11 +17,14 @@ public abstract class GenericMethod extends GenericCallable implements IMethod {
     protected StandardType standardReturnedType;
     private String name;
 
-    public GenericMethod(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor, String name, StandardType standardInnerType, StandardType standardReturnedType, List<StandardType> standardTypeParameters) {
+    private boolean isObjectMethod;
+
+    public GenericMethod(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor, boolean isObjectMethod, String name, StandardType standardInnerType, StandardType standardReturnedType, List<StandardType> standardTypeParameters) {
         super(standardTypeDirectory, typeInferenceMotor, standardTypeParameters);
         this.standardInnerType = standardInnerType;
         this.standardReturnedType = standardReturnedType;
         this.name = name;
+        this.isObjectMethod = isObjectMethod;
         register();
     }
 
@@ -31,6 +34,9 @@ public abstract class GenericMethod extends GenericCallable implements IMethod {
     }
 
     public final void processLinks(Typable innerTypable, Method method) {
+        if(isObjectMethod){
+            method.setObjectMethod();
+        }
         processLinks(innerTypable, method.getReturnedTypable(), method.getParameters());
     }
 
@@ -59,4 +65,8 @@ public abstract class GenericMethod extends GenericCallable implements IMethod {
     }
 
     public abstract com.code.generation.v1_3.elements.strong_type.callables.Method makeStrongMethod(NormalType innerNormalType, CanBeReturnedType returned, List<CanBeProvideForParameter> arguments);
+
+    public boolean isObjectMethod() {
+        return isObjectMethod;
+    }
 }

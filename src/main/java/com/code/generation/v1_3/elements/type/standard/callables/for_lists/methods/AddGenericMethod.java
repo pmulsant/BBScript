@@ -19,7 +19,7 @@ public class AddGenericMethod extends GenericMethod {
     private static final String NAME = "add";
 
     public AddGenericMethod(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor) {
-        super(standardTypeDirectory, typeInferenceMotor, NAME, null, standardTypeDirectory.getStandardType(StandardKnowledges.VOID_TYPE_NAME), Collections.singletonList(null));
+        super(standardTypeDirectory, typeInferenceMotor, false, NAME, null, standardTypeDirectory.getStandardType(StandardKnowledges.VOID_TYPE_NAME), Collections.singletonList(null));
     }
 
     @Override
@@ -33,6 +33,6 @@ public class AddGenericMethod extends GenericMethod {
         StrongTypeDirectory strongTypeDirectory = innerNormalType.getStrongTypeDirectory();
         NormalType innerListType = ((ListType) innerNormalType).getInnerType();
         Parameter parameter = new Parameter(null, innerListType);
-        return new Method(innerNormalType.getStrongTypeDirectory(), innerNormalType, getName(), strongTypeDirectory.getVoidStrongType(), Collections.singletonList(parameter));
+        return new Method(innerNormalType.getStrongTypeDirectory(), true, innerNormalType, getName(), strongTypeDirectory.getVoidStrongType(), Collections.singletonList(parameter));
     }
 }

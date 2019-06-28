@@ -24,7 +24,7 @@ public class EqualsMethod extends GenericMethod {
     private static final String METHOD_NAME = "equals";
 
     public EqualsMethod(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor) {
-        super(standardTypeDirectory, typeInferenceMotor, METHOD_NAME, null, standardTypeDirectory.getStandardType(StandardKnowledges.BOOLEAN_TYPE_NAME), Collections.singletonList(null));
+        super(standardTypeDirectory, typeInferenceMotor, true, METHOD_NAME, null, standardTypeDirectory.getStandardType(StandardKnowledges.BOOLEAN_TYPE_NAME), Collections.singletonList(null));
     }
 
     @Override
@@ -45,6 +45,6 @@ public class EqualsMethod extends GenericMethod {
             throw new TypeConflictException(innerNormalType.getComplexName(), canBeProvideForParameter.toString());
         }
         Parameter parameter = new Parameter(null, (CanBeParameterType) canBeProvideForParameter);
-        return new Method(strongTypeDirectory, innerNormalType, getName(), booleanType, Collections.singletonList(parameter));
+        return new Method(strongTypeDirectory, true, innerNormalType, getName(), booleanType, Collections.singletonList(parameter));
     }
 }

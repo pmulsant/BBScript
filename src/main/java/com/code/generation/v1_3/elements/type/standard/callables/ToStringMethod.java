@@ -22,7 +22,7 @@ public class ToStringMethod extends GenericMethod {
     private static final String METHOD_NAME = "toString";
 
     public ToStringMethod(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor) {
-        super(standardTypeDirectory, typeInferenceMotor, METHOD_NAME, null, standardTypeDirectory.getStandardType(StandardKnowledges.STRING_TYPE_NAME), Collections.EMPTY_LIST);
+        super(standardTypeDirectory, typeInferenceMotor, true, METHOD_NAME, null, standardTypeDirectory.getStandardType(StandardKnowledges.STRING_TYPE_NAME), Collections.EMPTY_LIST);
     }
 
     @Override
@@ -33,6 +33,6 @@ public class ToStringMethod extends GenericMethod {
     public Method makeStrongMethod(NormalType innerNormalType, CanBeReturnedType returned, List<CanBeProvideForParameter> arguments) {
         StrongTypeDirectory strongTypeDirectory = innerNormalType.getStrongTypeDirectory();
         CustomType stringType = strongTypeDirectory.getStrongType(Operable.STRING);
-        return new Method(innerNormalType.getStrongTypeDirectory(), innerNormalType, getName(), stringType, Collections.EMPTY_LIST);
+        return new Method(innerNormalType.getStrongTypeDirectory(), true, innerNormalType, getName(), stringType, Collections.EMPTY_LIST);
     }
 }

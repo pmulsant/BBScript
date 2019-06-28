@@ -2,9 +2,11 @@ package com.code.generation.v1_3.elements.type.standard;
 
 import com.code.generation.v1_3.elements.type.Typable;
 import com.code.generation.v1_3.elements.type.Type;
+import com.code.generation.v1_3.elements.type.custom.Attribute;
 import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericConstructor;
 import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericMethod;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Constructor;
+import com.code.generation.v1_3.elements.type.custom.callables.simples.Lambda;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Method;
 import com.code.generation.v1_3.exception.UnConformedStandardTypeException;
 import com.code.generation.v1_3.exception.for_callables.NotStandardCallableForThisTypeException;
@@ -101,5 +103,25 @@ public abstract class StandardType extends Type {
             }
             standardMethod.checkIsRespectedByMethod(method);
         }
+    }
+
+    @Override
+    public void setAttributeFromFusion(Attribute attribute, boolean isStrong) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public void setMethodFromFusion(Method method){
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public void setConstructorFromFusion(Constructor constructor) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public void setLambdaFromFusion(Lambda lambda) {
+        throw new IllegalStateException();
     }
 }

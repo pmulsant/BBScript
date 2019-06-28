@@ -134,11 +134,14 @@ public abstract class NormalType implements CanBeReturnedType, CanBeParameterTyp
 
     public void buildMethods() {
         for (com.code.generation.v1_3.elements.type.custom.callables.simples.Method method : initialType.getMethods().values()) {
+            if(method.isObjectMethod()){
+                continue;
+            }
             StrongType returnedType = strongTypeDirectory.getStrongType(method.getReturnedTypable().getType());
             if (!(returnedType instanceof CanBeReturnedType)) {
                 throw new WrongTypeFormatException(returnedType, "can't be returned type");
             }
-            addMethod(new Method(strongTypeDirectory,this, method.getName(), (CanBeReturnedType) returnedType, getStrongParameterTypes(method)));
+            addMethod(new Method(strongTypeDirectory,false, this, method.getName(), (CanBeReturnedType) returnedType, getStrongParameterTypes(method)));
         }
     }
 

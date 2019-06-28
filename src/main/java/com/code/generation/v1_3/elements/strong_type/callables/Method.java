@@ -9,12 +9,14 @@ import com.code.generation.v1_3.elements.strong_type.custom.Parameter;
 import java.util.List;
 
 public class Method extends Callable implements NamedCallable, CanReturn, LinkedToType {
+    private boolean isStandard;
     private NormalType normalType;
     private String name;
     private CanBeReturnedType returnedType;
 
-    public Method(StrongTypeDirectory strongTypeDirectory, NormalType normalType, String name, CanBeReturnedType returnedType, List<Parameter> parameters) {
+    public Method(StrongTypeDirectory strongTypeDirectory, boolean isStandard, NormalType normalType, String name, CanBeReturnedType returnedType, List<Parameter> parameters) {
         super(strongTypeDirectory, parameters);
+        this.isStandard = isStandard;
         this.normalType = normalType;
         this.name = name;
         this.returnedType = returnedType;
@@ -48,5 +50,9 @@ public class Method extends Callable implements NamedCallable, CanReturn, Linked
     @Override
     public String toString() {
         return "method " + returnedType.getComplexName() + " " + normalType.getComplexName() + "." + name + "(" + getParamsString() + ")";
+    }
+
+    public boolean isStandard() {
+        return isStandard;
     }
 }

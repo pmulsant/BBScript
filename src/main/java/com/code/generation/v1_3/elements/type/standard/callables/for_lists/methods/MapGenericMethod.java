@@ -17,7 +17,7 @@ public class MapGenericMethod extends GenericMethod {
     public static final String METHOD_NAME = "map";
 
     public MapGenericMethod(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor) {
-        super(standardTypeDirectory, typeInferenceMotor, METHOD_NAME, null, null, Collections.EMPTY_LIST);
+        super(standardTypeDirectory, typeInferenceMotor, false, METHOD_NAME, null, null, Collections.EMPTY_LIST);
     }
 
     @Override
@@ -35,6 +35,6 @@ public class MapGenericMethod extends GenericMethod {
         NormalType lambdaReturned = ((ListType) returned).getInnerType();
         LambdaType lambdaType = new LambdaType(innerNormalType.getStrongTypeDirectory(), lambdaReturned, Collections.singletonList(lambdaParameter));
         Parameter finalParameter = new Parameter(null, lambdaType);
-        return new Method(innerNormalType.getStrongTypeDirectory(), innerNormalType, getName(), returned, Collections.singletonList(finalParameter));
+        return new Method(innerNormalType.getStrongTypeDirectory(), true, innerNormalType, getName(), returned, Collections.singletonList(finalParameter));
     }
 }

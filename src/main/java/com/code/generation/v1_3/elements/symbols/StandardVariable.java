@@ -9,4 +9,9 @@ public class StandardVariable extends Variable {
         super(typeInferenceMotor, globalScope, name, null);
         setType(new ProvidedCustomizableType(typeInferenceMotor, typeName));
     }
+
+    @Override
+    public String toString() {
+        return "standard variable : " + getName();
+    }
 }

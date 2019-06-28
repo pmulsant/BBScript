@@ -159,15 +159,15 @@ public class TypeSet {
 
     private List<FusionDeclaration> fusionLambda(Type newType) {
         List<FusionDeclaration> result = new LinkedList<>();
-        LinkedList<Lambda> lambdas = new LinkedList<>();
+        Set<Lambda> lambdas = new HashSet<>();
         for (Type type : types) {
             if (type.getLambda() != null) {
                 lambdas.add(type.getLambda());
             }
         }
         if (!lambdas.isEmpty()) {
-            Lambda newLambda = newType.setLambda(fusionParamsNumber(null, lambdas));
-            result.addAll(fusionCanReturns(newLambda, lambdas));
+            newType.setLambdaFromFusion(Util.getOneFromSet(lambdas));
+            result.addAll(fusionCanReturns(lambdas));
         }
         return result;
     }
@@ -243,7 +243,7 @@ public class TypeSet {
             }
             if (!attributes.isEmpty()) {
                 boolean isStrong = attributes.stream().anyMatch(attribute -> ((Attribute) attribute).isStrong());
-                attributes.add(newType.getAttribute(attributeName, isStrong));
+                newType.setAttributeFromFusion((Attribute) Util.getOneFromSet(attributes), isStrong);
                 result.add(new FusionDeclaration(typeInferenceMotor, attributes));
             }
         }
@@ -257,7 +257,7 @@ public class TypeSet {
             methodNames.addAll(type.getMethods().keySet());
         }
         for (String methodName : methodNames) {
-            List<Method> methods = new LinkedList<>();
+            Set<Method> methods = new HashSet<>();
             for (Type type : types) {
                 Method method = type.getMethodNoCreate(methodName);
                 if (method != null) {
@@ -265,19 +265,17 @@ public class TypeSet {
                 }
             }
             if (!methods.isEmpty()) {
-                int paramNumbers = fusionParamsNumber(methodName, methods);
-                Method newMethod = newType.getMethod(methodName, paramNumbers);
-                result.addAll(fusionParams(newMethod, methods));
-                result.addAll(fusionCanReturns(newMethod, methods));
+                newType.setMethodFromFusion(Util.getOneFromSet(methods));
+                result.addAll(fusionCanReturns(methods));
             }
         }
         return result;
     }
 
-    private int fusionParamsNumber(String methodName, List<? extends ICallable> callables) {
+    private int fusionParamsNumber(Set<? extends ICallable> callables) {
         Set<Integer> paramsNumbers = callables.stream().map(method -> method.getParamsNumber()).collect(Collectors.toSet());
         if (paramsNumbers.size() != 1) {
-            throw new WrongParamNumberException("more than one params number possibilities for callable " + methodName);
+            throw new WrongParamNumberException("more than one params number possibilities for callable " + callables);
         }
         return Util.getOneFromSet(paramsNumbers);
     }
@@ -289,7 +287,7 @@ public class TypeSet {
             constructorParamsNumbers.addAll(type.getConstructors().keySet());
         }
         for (Integer constructorParamsNumber : constructorParamsNumbers) {
-            List<Constructor> constructors = new LinkedList<>();
+            Set<Constructor> constructors = new HashSet<>();
             for (Type type : types) {
                 Constructor constructor = type.getConstructorNoCreate(constructorParamsNumber);
                 if (constructor != null) {
@@ -297,49 +295,34 @@ public class TypeSet {
                 }
             }
             if (!constructors.isEmpty()) {
-                Constructor newConstructor = newType.getConstructor(constructorParamsNumber);
-                result.addAll(fusionParams(newConstructor, constructors));
+                newType.setConstructorFromFusion(Util.getOneFromSet(constructors));
+                result.addAll(fusionParams(constructors));
             }
         }
         return result;
     }
 
-    private List<FusionDeclaration> fusionCanReturns(CanReturn newCanReturn, List<? extends CanReturn> canReturns) {
+    private List<FusionDeclaration> fusionCanReturns(Set<? extends CanReturn> canReturns) {
+        CanReturn canReturn = Util.getOneFromSet(canReturns);
         List<FusionDeclaration> result = new LinkedList<>();
-        for (CanReturn canReturn : canReturns) {
-            canReturn.assertRightParamsNumber(newCanReturn.getParamsNumber());
+        for (CanReturn aCanReturn : canReturns) {
+            aCanReturn.assertRightParamsNumber(canReturn.getParamsNumber());
         }
-        Set<Typable> returnedTypables = canReturns.stream().map(canReturn -> canReturn.getReturnedTypable()).collect(Collectors.toSet());
-        returnedTypables.add(newCanReturn.getReturnedTypable());
+        Set<Typable> returnedTypables = canReturns.stream().map(aCanReturn -> aCanReturn.getReturnedTypable()).collect(Collectors.toSet());
         result.add(new FusionDeclaration(typeInferenceMotor, returnedTypables));
-        result.addAll(fusionParams(newCanReturn, canReturns));
+        result.addAll(fusionParams(canReturns));
         return result;
     }
 
-    private List<FusionDeclaration> fusionParams(ISimpleCallable callable, List<? extends ISimpleCallable> callables) {
-        List<FusionDeclaration> result = new ArrayList<>(callable.getParamsNumber());
-        for (int index = 0; index < callable.getParamsNumber(); index++) {
+    private List<FusionDeclaration> fusionParams(Set<? extends ISimpleCallable> callables) {
+        int paramsNumber = fusionParamsNumber(callables);
+        List<FusionDeclaration> result = new ArrayList<>(paramsNumber);
+        for (int index = 0; index < paramsNumber; index++) {
             int finalIndex = index;
             Set<Typable> paramTypables = callables.stream().map(aCallable -> aCallable.getParameter(finalIndex)).collect(Collectors.toSet());
-            Parameter newParameter = callable.getParameter(finalIndex);
-            paramTypables.add(newParameter);
-
-            setNameForParameter(newParameter, finalIndex, callables);
-
             result.add(new FusionDeclaration(typeInferenceMotor, paramTypables));
         }
         return result;
-    }
-
-    private void setNameForParameter(Parameter newParameter, int parameterIndex, List<? extends ISimpleCallable> callables) {
-        Set<String> paramNames = callables.stream().map(aCallable -> aCallable.getParameter(parameterIndex).getName()).filter(Objects::nonNull).collect(Collectors.toSet());
-        if (paramNames.size() > 1) {
-            throw new WrongArgumentConventionException("more than one name for parameter");
-        }
-        String paramName = Util.getOneFromSet(paramNames);
-        if (paramName != null) {
-            newParameter.setName(paramName);
-        }
     }
 
     public void replaceType(Type oldType, Type newType) {

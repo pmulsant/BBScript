@@ -1,0 +1,9 @@
+class MyObject {
+	float attr2;
+	int attr;
+	
+	MyObject() {
+		this.attr = 5;
+	}
+	
+}

@@ -13,9 +13,11 @@ import com.code.generation.v1_3.exception.TypeConflictException;
 import com.code.generation.v1_3.exception.rules.NotANumberException;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 import com.code.generation.v1_3.inference.fusion.TypeSet;
+import com.code.generation.v1_3.util.Util;
 import com.generated.GrammarParser;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Type {
     private boolean isDeducedAndCoherent = false;
@@ -296,6 +298,10 @@ public class Type {
         if(isList()){
             return "list<" + innerTypable.getType().toString()+ ">";
         }
+        if(isLambda()){
+            return "lambda : (" + lambda.getParameters().stream().map(parameter -> parameter.toString()).collect(Collectors.toList())
+                    + ") -> " + lambda.getReturnedTypable();
+        }
         return "type : " + (simpleName != null ? (simpleName.equals(StandardKnowledges.NULL_KEY_WORD) ? "the null type" : simpleName) : "unknown");
     }
 
@@ -316,5 +322,29 @@ public class Type {
 
     public List<Typable> getTypables() {
         return typables;
+    }
+
+    public void setAttributeFromFusion(Attribute attribute, boolean isStrong) {
+        if(attribute.getName() == null){
+            throw new IllegalStateException();
+        }
+        attributes.computeIfAbsent(attribute.getName(), key -> attribute);
+        if(isStrong) {
+            attribute.setStrong();
+        }
+    }
+
+    public void setMethodFromFusion(Method method){
+        methods.computeIfAbsent(method.getName(), key -> method);
+    }
+
+    public void setConstructorFromFusion(Constructor constructor) {
+        constructors.computeIfAbsent(constructor.getParamsNumber(), key -> constructor);
+    }
+
+    public void setLambdaFromFusion(Lambda lambda) {
+        if(this.lambda == null){
+            this.lambda = lambda;
+        }
     }
 }

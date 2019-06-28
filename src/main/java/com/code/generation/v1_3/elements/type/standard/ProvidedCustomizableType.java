@@ -8,4 +8,9 @@ public class ProvidedCustomizableType extends Type {
         super(typeInferenceMotor);
         simpleName = name;
     }
+
+    @Override
+    public String toString() {
+        return "provided customizable type : " + simpleName;
+    }
 }

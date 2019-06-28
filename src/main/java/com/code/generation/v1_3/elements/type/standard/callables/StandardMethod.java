@@ -23,7 +23,7 @@ public abstract class StandardMethod extends GenericMethod {
     protected StandardTypeDirectory standardTypeDirectory;
 
     public StandardMethod(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor, String name, StandardType standardInnerType, StandardType standardReturnedType, List<StandardType> standardTypeParameters) {
-        super(standardTypeDirectory, typeInferenceMotor, name, standardInnerType, standardReturnedType, standardTypeParameters);
+        super(standardTypeDirectory, typeInferenceMotor, false, name, standardInnerType, standardReturnedType, standardTypeParameters);
     }
 
     @Override
@@ -53,6 +53,6 @@ public abstract class StandardMethod extends GenericMethod {
             }
             parameters.add(new Parameter(null, standardParameterType));
         }
-        return new Method(innerNormalType.getStrongTypeDirectory(), innerNormalType, getName(), returnedType, parameters);
+        return new Method(innerNormalType.getStrongTypeDirectory(), true, innerNormalType, getName(), returnedType, parameters);
     }
 }

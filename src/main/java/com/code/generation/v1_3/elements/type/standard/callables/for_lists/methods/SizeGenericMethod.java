@@ -22,7 +22,7 @@ public class SizeGenericMethod extends GenericMethod {
     public static final String METHOD_NAME = "size";
 
     public SizeGenericMethod(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor) {
-        super(standardTypeDirectory, typeInferenceMotor, METHOD_NAME, null, standardTypeDirectory.getStandardType(StandardKnowledges.INT_TYPE_NAME), Collections.EMPTY_LIST);
+        super(standardTypeDirectory, typeInferenceMotor, false, METHOD_NAME, null,  standardTypeDirectory.getStandardType(StandardKnowledges.INT_TYPE_NAME), Collections.EMPTY_LIST);
     }
 
     @Override
@@ -34,6 +34,6 @@ public class SizeGenericMethod extends GenericMethod {
     public Method makeStrongMethod(NormalType innerNormalType, CanBeReturnedType returned, List<CanBeProvideForParameter> arguments) {
         StrongTypeDirectory strongTypeDirectory = innerNormalType.getStrongTypeDirectory();
         CustomType intType = strongTypeDirectory.getStrongType(Operable.INT);
-        return new Method(innerNormalType.getStrongTypeDirectory(), innerNormalType, getName(), intType, Collections.EMPTY_LIST);
+        return new Method(innerNormalType.getStrongTypeDirectory(), true, innerNormalType, getName(), intType, Collections.EMPTY_LIST);
     }
 }

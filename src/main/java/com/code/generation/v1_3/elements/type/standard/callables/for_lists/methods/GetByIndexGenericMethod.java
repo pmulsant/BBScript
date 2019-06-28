@@ -19,7 +19,7 @@ public class GetByIndexGenericMethod extends GenericMethod {
     public static final String METHOD_NAME = "get";
 
     public GetByIndexGenericMethod(StandardTypeDirectory standardTypeDirectory, TypeInferenceMotor typeInferenceMotor) {
-        super(standardTypeDirectory, typeInferenceMotor, METHOD_NAME, null, null, Collections.singletonList(standardTypeDirectory.getStandardType(StandardKnowledges.INT_TYPE_NAME)));
+        super(standardTypeDirectory, typeInferenceMotor,false,  METHOD_NAME, null, null, Collections.singletonList(standardTypeDirectory.getStandardType(StandardKnowledges.INT_TYPE_NAME)));
     }
 
     @Override
@@ -34,6 +34,6 @@ public class GetByIndexGenericMethod extends GenericMethod {
         CustomType intType = strongTypeDirectory.getStrongType(Operable.INT);
         Parameter parameter = new Parameter(null, intType);
         NormalType innerListType = ((ListType) innerNormalType).getInnerType();
-        return new Method(innerNormalType.getStrongTypeDirectory(), innerNormalType, getName(), innerListType, Collections.singletonList(parameter));
+        return new Method(innerNormalType.getStrongTypeDirectory(), true, innerNormalType, getName(), innerListType, Collections.singletonList(parameter));
     }
 }
