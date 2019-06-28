@@ -16,7 +16,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CustomTypeWriter extends CodeWriter {
@@ -32,16 +32,22 @@ public class CustomTypeWriter extends CodeWriter {
     @Override
     protected void write() throws IOException {
         writeLine("class " + customType.getName() + " {", 0);
-        for (Attribute attribute : customType.getAttributes().values()) {
+        List<Attribute> attributes = new ArrayList<>(customType.getAttributes().values());
+        attributes.sort((attribute1, attribute2) -> String.CASE_INSENSITIVE_ORDER.compare(attribute1.getName(), attribute2.getName()));
+        for (Attribute attribute : attributes) {
             writeLine(attribute.toDefinitionStatementString(), INNER_CLASS_INDENT_LEVEL);
         }
         if(!customType.getAttributes().isEmpty()) {
             writeLine("", INNER_CLASS_INDENT_LEVEL);
         }
-        for (Constructor constructor : customType.getConstructors().values()) {
+        List<Constructor> constructors = new ArrayList<>(customType.getConstructors().values());
+        constructors.sort(Comparator.comparingInt(cons -> cons.getParameters().size()));
+        for (Constructor constructor : constructors) {
             writeConstructor(constructor);
         }
-        for (Method method : customType.getMethods().values()) {
+        List<Method> methods = new ArrayList<>(customType.getMethods().values());
+        methods.sort((method1, method2) -> String.CASE_INSENSITIVE_ORDER.compare(method1.getName(), method2.getName()));
+        for (Method method : methods) {
             writeMethod(method);
         }
         writeLine("}", 0);

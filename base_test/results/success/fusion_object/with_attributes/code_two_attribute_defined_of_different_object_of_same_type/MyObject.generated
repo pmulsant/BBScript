@@ -1,6 +1,6 @@
 class MyObject {
-	float attr2;
 	int attr;
+	float attr2;
 	
 	MyObject() {
 		this.attr = 5;

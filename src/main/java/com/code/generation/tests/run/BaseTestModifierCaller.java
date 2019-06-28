@@ -10,22 +10,22 @@ public class BaseTestModifierCaller {
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         //BaseTestModifier.main(new String[]{"all"});
         //BaseTestModifier.main(new String[]{"rebuild", "failed"});
-        /*BaseTestModifier.main(new String[]{
+        BaseTestModifier.main(new String[]{
                 "rebuild",
 
-                "success/many_statements/if_statement",
-                "if_and_two_else_if_and_else_empty"});*/
+                "success/fusion_object/with_attributes",
+                "two_attribute_defined_of_different_object_of_same_type"});
         /*BaseTestModifier.main(new String[]{"remove",
 
                 "success/rules_tests/simple_down_top_inference",
                 "mul_two_floats"
         });*/
-        BaseTestModifier.main(new String[]{"replace",
+        /*BaseTestModifier.main(new String[]{"replace",
 
                 "failed/callables/functions",
                 "empty_function_no_args",
 
                 "success/callables/functions",
-                "empty_function_no_args"});
+                "empty_function_no_args"});*/
     }
 }
