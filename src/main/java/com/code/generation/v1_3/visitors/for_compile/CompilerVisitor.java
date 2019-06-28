@@ -376,7 +376,7 @@ public class CompilerVisitor extends GrammarBaseVisitor<CompiledResult> {
     }
 
     private StatementResult manageBreakOrContinueStat(boolean isBreakStat) {
-        InlineChunk inlineChunk = new InlineChunk(isBreakStat ? "break" : "continue");
+        InlineChunk inlineChunk = new InlineChunk((isBreakStat ? "break" : "continue") + ';');
         return StatementResult.getInstance(InnerStatementResult.getInstance(Collections.singletonList(inlineChunk)));
     }
 

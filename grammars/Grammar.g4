@@ -63,9 +63,9 @@ throwStat : 'throw' expr ';';
 
 returnStat : 'return' expr? ';';
 
-breakStat : 'break';
+breakStat : 'break;';
 
-continueStat : 'continue';
+continueStat : 'continue;';
 
 complexId : ID ('<' type '>')?;
 

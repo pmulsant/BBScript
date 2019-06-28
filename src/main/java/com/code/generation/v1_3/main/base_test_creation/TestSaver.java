@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class TestSaver {
 
-    private static final String PREFIX = "success/many_statements/if_statement/scope_test";
-    private static final String CODE_NAME = "get_prog_variable_after_inner_if_in_if_provided";
+    private static final String PREFIX = "success/many_statements/while_statement";
+    private static final String CODE_NAME = "while_with_continue_statement";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});
