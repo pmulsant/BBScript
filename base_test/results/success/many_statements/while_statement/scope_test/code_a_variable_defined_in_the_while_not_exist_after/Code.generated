@@ -1,0 +1,7 @@
+while(true) {
+	float a;
+	a = 0.5;
+	break;
+}
+int a;
+a = 1;

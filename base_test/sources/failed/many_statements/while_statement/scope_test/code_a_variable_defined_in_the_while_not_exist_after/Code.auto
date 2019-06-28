@@ -1,0 +1,5 @@
+while(true){
+    a = 0.5;
+    break;
+}
+a;

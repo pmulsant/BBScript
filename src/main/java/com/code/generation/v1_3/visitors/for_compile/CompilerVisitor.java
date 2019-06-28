@@ -366,7 +366,7 @@ public class CompilerVisitor extends GrammarBaseVisitor<CompiledResult> {
 
     private StatementResult manageReturnOrThrowStat(boolean isReturnStat, GrammarParser.ExprContext expr) {
         List<IChunk> chunks = new ArrayList<>();
-        chunks.add(new InlineChunk(isReturnStat? "return" : "throw "));
+        chunks.add(new InlineChunk(isReturnStat? "return" : "throw"));
         if(expr != null){
             chunks.add(new InlineChunk(" "));
             chunks.add((InnerStatementResult) visit(expr));

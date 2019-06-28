@@ -22,10 +22,10 @@ public class BaseTestModifierCaller {
         });*/
         BaseTestModifier.main(new String[]{"replace",
 
-                "failed/many_statements/while_statement",
-                "non_empty_while",
+                "failed/callables/functions",
+                "empty_function_no_args",
 
-                "success/many_statements/while_statement",
-                "non_empty_while"});
+                "success/callables/functions",
+                "empty_function_no_args"});
     }
 }
