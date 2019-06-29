@@ -1,0 +1,9 @@
+class MyObject {
+	MyObject() {
+	}
+	
+	int method() {
+		return 1;
+	}
+	
+}

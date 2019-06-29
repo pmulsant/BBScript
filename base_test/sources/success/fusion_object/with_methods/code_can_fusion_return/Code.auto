@@ -1,0 +1,9 @@
+a = new MyObject(){
+};
+c = a.method();
+$b.method(){
+    return 1;
+};
+if(true){
+    a.equals($b);
+}

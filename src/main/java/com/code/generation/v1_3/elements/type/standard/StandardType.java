@@ -8,6 +8,7 @@ import com.code.generation.v1_3.elements.type.custom.callables.complex.GenericMe
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Constructor;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Lambda;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.Method;
+import com.code.generation.v1_3.elements.type.standard.simple_types.NullStandardType;
 import com.code.generation.v1_3.exception.UnConformedStandardTypeException;
 import com.code.generation.v1_3.exception.for_callables.NotStandardCallableForThisTypeException;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
@@ -72,6 +73,9 @@ public abstract class StandardType extends Type {
 
     public void checkIsRespectedByType(Type type) {
         if (type == this) {
+            return;
+        }
+        if(type instanceof NullStandardType){
             return;
         }
         if (type.isList()) {

@@ -8,8 +8,8 @@ import com.code.generation.tests.run.BaseTestModifier;
 import java.io.IOException;
 
 public class TestSaver {
-    private static final String PREFIX = "success/fusion_object/with_methods";
-    private static final String CODE_NAME = "can_fusion_argument_2";
+    private static final String PREFIX = "success/null_tests/many_statements";
+    private static final String CODE_NAME = "add_a_float_variable_which_can_be_null_with_an_int";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});
