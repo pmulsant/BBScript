@@ -5,7 +5,8 @@ import com.code.generation.v1_3.elements.symbols.Variable;
 import com.code.generation.v1_3.inference.TypeInferenceMotor;
 
 public interface Scope {
-    Scope getParent();
+
+    CallableScope searchCallableScope();
 
     ProgScope searchProgScope();
 

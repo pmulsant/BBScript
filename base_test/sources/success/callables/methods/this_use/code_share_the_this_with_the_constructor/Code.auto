@@ -1,0 +1,6 @@
+new MyObject(){
+    this.attr = 5;
+    this.method(){
+        this.attr;
+    };
+};

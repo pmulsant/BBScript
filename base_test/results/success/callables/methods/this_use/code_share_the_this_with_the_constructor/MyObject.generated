@@ -1,0 +1,13 @@
+class MyObject {
+	int attr;
+	
+	MyObject() {
+		this.attr = 5;
+		this.method();
+	}
+	
+	void method() {
+		this.attr;
+	}
+	
+}

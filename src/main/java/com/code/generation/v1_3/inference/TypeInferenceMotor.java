@@ -81,7 +81,7 @@ public class TypeInferenceMotor {
             throw new IllegalStateException();
         }
         if(typable1 == typable2){
-            throw new IllegalStateException();
+            return;
         }
         if(typable1 instanceof StandardTypable && typable2 instanceof StandardTypable) {
             if (!typable1.getType().getSimpleName().equals(typable2.getType().getSimpleName())){

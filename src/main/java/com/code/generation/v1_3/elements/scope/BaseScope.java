@@ -18,8 +18,14 @@ public abstract class BaseScope implements Scope {
     }
 
     @Override
-    public Scope getParent() {
-        return parentScope;
+    public CallableScope searchCallableScope() {
+        if(this instanceof CallableScope){
+            return (CallableScope) this;
+        }
+        if(parentScope == null){
+            return null;
+        }
+        return parentScope.searchCallableScope();
     }
 
     @Override
