@@ -320,6 +320,14 @@ public class TypeSet {
         for (int index = 0; index < paramsNumber; index++) {
             int finalIndex = index;
             Set<Typable> paramTypables = callables.stream().map(aCallable -> aCallable.getParameter(finalIndex)).collect(Collectors.toSet());
+            Set<String> paramNames = paramTypables.stream().map(typable -> ((Parameter) typable).getName()).filter(Objects::nonNull).collect(Collectors.toSet());
+            if(paramNames.size() > 1){
+                throw new IllegalStateException();
+            }
+            String paramName = Util.getOneFromSet(paramNames);
+            if(paramName != null){
+                paramTypables.forEach(typable -> ((Parameter) typable).setName(paramName));
+            }
             result.add(new FusionDeclaration(typeInferenceMotor, paramTypables));
         }
         return result;

@@ -1,0 +1,9 @@
+MyObject a;
+a = new MyObject();
+a.method("ok");
+MyObject $b;
+String $arg;
+$b.method($arg);
+if(true) {
+	a.equals($b);
+}

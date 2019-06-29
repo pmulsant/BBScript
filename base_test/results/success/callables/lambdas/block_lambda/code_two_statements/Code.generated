@@ -1,0 +1,5 @@
+List<String> $list;
+$list.map(item -> {
+	item = item + "ok";
+	return item;
+{);

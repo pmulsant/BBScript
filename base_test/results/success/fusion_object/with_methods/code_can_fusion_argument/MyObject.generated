@@ -1,0 +1,8 @@
+class MyObject {
+	MyObject() {
+	}
+	
+	void method(String arg) {
+	}
+	
+}

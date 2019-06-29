@@ -1,0 +1,9 @@
+class MyObject {
+	MyObject() {
+	}
+	
+	void method(int arg) {
+		arg == 1;
+	}
+	
+}

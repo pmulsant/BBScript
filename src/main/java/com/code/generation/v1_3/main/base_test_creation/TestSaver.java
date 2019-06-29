@@ -8,8 +8,8 @@ import com.code.generation.tests.run.BaseTestModifier;
 import java.io.IOException;
 
 public class TestSaver {
-    private static final String PREFIX = "success/callables/lambdas/block_lambda";
-    private static final String CODE_NAME = "one_statement_lambda";
+    private static final String PREFIX = "success/fusion_object/with_methods";
+    private static final String CODE_NAME = "can_fusion_argument_2";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});

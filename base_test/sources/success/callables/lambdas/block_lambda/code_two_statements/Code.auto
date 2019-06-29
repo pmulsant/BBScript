@@ -1,0 +1,4 @@
+$list.map(item -> {
+    item = item + "ok";
+    return item;
+});

@@ -1,0 +1,6 @@
+a = new MyObject(){
+    this.method(){
+    };
+};
+$b.method();
+a.equals(b);
