@@ -1,0 +1,6 @@
+class Model {
+	int method(int a) {
+		return a;
+	}
+	
+}

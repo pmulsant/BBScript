@@ -1,0 +1,7 @@
+function Regex func () {
+	if(true) {
+		return /a/;
+	}
+	return null;
+}
+

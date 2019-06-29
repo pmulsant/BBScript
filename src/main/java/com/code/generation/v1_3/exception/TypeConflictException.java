@@ -23,7 +23,7 @@ public class TypeConflictException extends RuntimeCustomException {
         this(Arrays.asList(name1, name2), String.CASE_INSENSITIVE_ORDER);
     }
 
-    public TypeConflictException(List<StandardType> typeConflicts) {
+    public TypeConflictException(List<? extends Type> typeConflicts) {
         this(typeConflicts.stream().map(standardType -> standardType.toString()).collect(Collectors.toList()), String.CASE_INSENSITIVE_ORDER);
     }
 

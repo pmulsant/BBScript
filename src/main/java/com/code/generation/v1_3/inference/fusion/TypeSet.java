@@ -5,6 +5,7 @@ import com.code.generation.v1_3.elements.type.Type;
 import com.code.generation.v1_3.elements.type.custom.Attribute;
 import com.code.generation.v1_3.elements.type.custom.callables.ICallable;
 import com.code.generation.v1_3.elements.type.custom.callables.simples.*;
+import com.code.generation.v1_3.elements.type.standard.ProvidedCustomizableType;
 import com.code.generation.v1_3.elements.type.standard.StandardKnowledges;
 import com.code.generation.v1_3.elements.type.standard.StandardType;
 import com.code.generation.v1_3.elements.type.standard.simple_types.NullStandardType;
@@ -54,7 +55,14 @@ public class TypeSet {
             return Collections.EMPTY_LIST;
         }
         List<FusionDeclaration> fusionDeclarations = new LinkedList<>();
-        cleanTypeSetWithNewType(fusion(fusionDeclarations));
+        ProvidedCustomizableType providedCustomizableType = getProvidedCustomizableType();
+        Type newType;
+        if(providedCustomizableType != null){
+            newType = fusion(fusionDeclarations, providedCustomizableType);
+        } else {
+            newType = fusion(fusionDeclarations, null);
+        }
+        cleanTypeSetWithNewType(newType);
         return fusionDeclarations;
     }
 
@@ -83,14 +91,32 @@ public class TypeSet {
         return null;
     }
 
+    private ProvidedCustomizableType getProvidedCustomizableType() {
+        Set<ProvidedCustomizableType> providedCustomizableTypes = new HashSet<>();
+        for (Type type : types) {
+            if (type instanceof ProvidedCustomizableType) {
+                providedCustomizableTypes.add((ProvidedCustomizableType) type);
+            }
+        }
+        if(providedCustomizableTypes.isEmpty()){
+            return null;
+        }
+        if(providedCustomizableTypes.size() > 1){
+            throw new TypeConflictException(new ArrayList<>(providedCustomizableTypes));
+        }
+        return Util.getOneFromSet(providedCustomizableTypes);
+    }
+
     private void assertStandardTypeIsRespected(StandardType standardType) {
         for (Type type : types) {
             standardType.checkIsRespectedByType(type);
         }
     }
 
-    private Type fusion(List<FusionDeclaration> fusionDeclarations) {
-        Type newType = new Type(typeInferenceMotor, this);
+    private Type fusion(List<FusionDeclaration> fusionDeclarations, Type newType) {
+        if(newType == null){
+            newType = new Type(typeInferenceMotor, this);
+        }
         fusionName(newType);
         fusionVoid(newType);
 

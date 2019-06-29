@@ -1,0 +1,4 @@
+int $a;
+model.method($a);
+int b;
+b = model.method(1);

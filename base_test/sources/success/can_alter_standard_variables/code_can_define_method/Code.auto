@@ -1,0 +1,4 @@
+model.method($a as a){
+    return a;
+};
+b = model.method(1);

@@ -1,0 +1,6 @@
+a<Regex> = func(){
+    if(true){
+        return /a/;
+    }
+    return null;
+};

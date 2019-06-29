@@ -8,8 +8,8 @@ import com.code.generation.tests.run.BaseTestModifier;
 import java.io.IOException;
 
 public class TestSaver {
-    private static final String PREFIX = "success/null_tests/many_statements";
-    private static final String CODE_NAME = "arg_can_be_null";
+    private static final String PREFIX = "failed/can_alter_standard_variables";
+    private static final String CODE_NAME = "cant_define_a_constructor";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});
