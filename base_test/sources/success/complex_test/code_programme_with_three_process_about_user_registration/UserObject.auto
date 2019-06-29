@@ -1,0 +1,4 @@
+aUser = new MyUser($name as name, $age as theAge){
+    this..name = name;
+    this..age = theAge;
+};

@@ -244,10 +244,8 @@ public class Type {
             return;
         }
         int specialTypesNumber = 0;
-        StandardType standardType = null;
         if (isVoid != null && isVoid) {
             specialTypesNumber++;
-            standardType = typeInferenceMotor.getStandardTypeDirectory().getStandardType(StandardKnowledges.VOID_TYPE_NAME);
         }
         if (isLambda()) {
             specialTypesNumber++;
@@ -267,7 +265,7 @@ public class Type {
             throw new CantFindTypeException(this);
         }
         checkAppearanceCoherenceWithSimpleName();
-        standardType = typeInferenceMotor.getStandardTypeDirectory().getStandardType(simpleName);
+        StandardType standardType = typeInferenceMotor.getStandardTypeDirectory().getStandardType(simpleName);
         if (standardType != null) {
             standardType.checkIsRespectedByTypeAndReplace(this);
             return;

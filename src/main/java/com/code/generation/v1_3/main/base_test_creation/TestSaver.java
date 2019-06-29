@@ -8,8 +8,8 @@ import com.code.generation.tests.run.BaseTestModifier;
 import java.io.IOException;
 
 public class TestSaver {
-    private static final String PREFIX = "success/multi_process";
-    private static final String CODE_NAME = "share_functions";
+    private static final String PREFIX = "success/complex_test";
+    private static final String CODE_NAME = "programme_with_three_process_about_user_registration";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});

@@ -1,0 +1,22 @@
+class MyUser {
+	(strong) int age;
+	boolean checked;
+	boolean isNice;
+	String lastName;
+	int lastNameLength;
+	(strong) String name;
+	
+	MyUser(String name, int theAge) {
+		this.name = name;
+		this.age = theAge;
+	}
+	
+	boolean isChecked() {
+		return this.checked;
+	}
+	
+	void setChecked() {
+		this.checked;
+	}
+	
+}

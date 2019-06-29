@@ -1,0 +1,18 @@
+MyUser $user;
+check($user);
+$user.age = int(0.7 + (9 + 10) + 0.2 * 4);
+if(true) {
+	int aVar;
+	aVar = global.MIN_AGE;
+	if(true) {
+	} else if(false) {
+		while($user.isNice) {
+			initMinAge(aVar);
+			$user;
+			model.global = global;
+			global.model = model;
+		}
+		global.value = 18;
+	}
+}
+global.model.global.value = model.global.getMinAge();

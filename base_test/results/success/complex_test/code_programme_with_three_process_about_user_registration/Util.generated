@@ -1,0 +1,18 @@
+function void initMinAge (int arg) {
+	if(arg >= 18) {
+		"ok";
+	}
+}
+
+function boolean check (MyUser user) {
+	if(user.isChecked()) {
+		return true;
+	}
+	boolean goodAge;
+	goodAge = user.age >= global.MIN_AGE;
+	boolean goodLastName;
+	goodLastName = /aaaa/.test((user.lastNameLength = user.lastName.length()) + user.name);
+	user.setChecked();
+	return goodAge && goodLastName && goodAge;
+}
+

@@ -1,0 +1,4 @@
+MyUser aUser;
+String $name;
+int $age;
+aUser = new MyUser($name, $age);

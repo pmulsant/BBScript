@@ -1,0 +1,7 @@
+List<MyUser> userList;
+userList = global.users;
+MyUser $user;
+if(check($user)) {
+	userList.add($user);
+}
+initMinAge(global.getMinAge());

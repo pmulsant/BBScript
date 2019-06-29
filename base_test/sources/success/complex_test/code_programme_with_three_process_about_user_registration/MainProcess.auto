@@ -1,0 +1,10 @@
+userList = global..users;
+if(check($user)){
+    userList.add($user);
+}
+
+initMinAge(global.getMinAge() as arg){
+      if(arg >= 18){
+        "ok";
+      }
+};

@@ -1,0 +1,31 @@
+check($user as user){
+    if(user.isChecked(){
+        return this.checked;
+    }){
+        return true;
+    }
+    goodAge = user.age >= global.MIN_AGE;
+    goodLastName = /aaaa/.test((user.lastNameLength = user.lastName.length()) + user.name);
+    user.setChecked(){
+        this.checked;
+    };
+    return goodAge && goodLastName && goodAge;
+};
+user.age = int(0.7 + (9 + 10) + 0.2 * 4);
+if(true){
+    aVar = global.MIN_AGE;
+    if(true){
+    }
+    else if(false){
+        while(user.isNice){
+            initMinAge(aVar);
+            user<MyUser>;
+            model..global = global;
+            global.model = model;
+        }
+        global.value = 18;
+    }
+}
+global.model.global.value = model.global.getMinAge(){
+    return null;
+};

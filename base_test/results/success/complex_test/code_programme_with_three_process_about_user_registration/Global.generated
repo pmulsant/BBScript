@@ -1,0 +1,11 @@
+class Global {
+	int MIN_AGE;
+	Model model;
+	(strong) List<MyUser> users;
+	int value;
+	
+	int getMinAge() {
+		return null;
+	}
+	
+}
