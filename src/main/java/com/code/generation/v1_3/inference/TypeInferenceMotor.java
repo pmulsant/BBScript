@@ -16,6 +16,7 @@ import com.code.generation.v1_3.elements.type.standard.StandardTypeDirectory;
 import com.code.generation.v1_3.elements.type.standard.callables.functions.StandardFunction;
 import com.code.generation.v1_3.elements.type.standard.simple_types.NullStandardType;
 import com.code.generation.v1_3.exception.CantBeOfNullTypeTypable;
+import com.code.generation.v1_3.exception.CantDefinedAStandardCallableException;
 import com.code.generation.v1_3.exception.WrongParamNumberException;
 import com.code.generation.v1_3.inference.fusion.FusionMotor;
 import com.code.generation.v1_3.inference.rules.OperablesRuleMotor;
@@ -151,7 +152,7 @@ public class TypeInferenceMotor {
     public void processLinkIfStandardConstructor(Typable topTypable, Constructor constructor, boolean isDefine, GrammarParser.TypeContext typeContext) {
         Map<Integer, GenericConstructor> standardConstructorMap = standardTypeDirectory.getConstructorMap(typeContext);
         if (standardConstructorMap != null) {
-            assertCallableIsNotDefined(isDefine);
+            assertCallableIsNotDefined(isDefine, standardConstructorMap.toString());
             GenericConstructor genericConstructor = standardConstructorMap.get(constructor.getParamsNumber());
             if (genericConstructor == null) {
                 throw new WrongParamNumberException(genericConstructor, constructor.getParamsNumber());
@@ -163,7 +164,7 @@ public class TypeInferenceMotor {
     public void processLinkIfStandardMethod(Typable innerTypable, Method method, boolean isDefine) {
         GenericMethod genericMethod = standardTypeDirectory.getMethod(method.getName());
         if (genericMethod != null) {
-            assertCallableIsNotDefined(isDefine);
+            assertCallableIsNotDefined(isDefine, method.getName());
             genericMethod.processLinks(innerTypable, method);
         }
     }
@@ -171,7 +172,7 @@ public class TypeInferenceMotor {
     public void processLinkIfStandardFunction(Function function, boolean isDefine) {
         StandardFunction standardFunction = standardTypeDirectory.getStandardFunction(function.getName());
         if (standardFunction != null) {
-            assertCallableIsNotDefined(isDefine);
+            assertCallableIsNotDefined(isDefine, function.getName());
             standardFunction.processLinks(function);
         }
     }
@@ -188,9 +189,9 @@ public class TypeInferenceMotor {
         return standardType.getOriginalTypable();
     }
 
-    private void assertCallableIsNotDefined(boolean isDefine) {
+    private void assertCallableIsNotDefined(boolean isDefine, String callableName) {
         if (isDefine) {
-            throw new IllegalStateException("can't define standard callable");
+            throw new CantDefinedAStandardCallableException(callableName);
         }
     }
 

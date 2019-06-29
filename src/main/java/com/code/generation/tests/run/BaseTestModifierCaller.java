@@ -13,8 +13,8 @@ public class BaseTestModifierCaller {
         BaseTestModifier.main(new String[]{
                 "rebuild",
 
-                "success/fusion_object/with_attributes",
-                "two_attribute_defined_of_different_object_of_same_type"});
+                "failed/callables/functions/standard_functions",
+                "cant_define_a_standard_callable"});
         /*BaseTestModifier.main(new String[]{"remove",
 
                 "success/rules_tests/simple_down_top_inference",
