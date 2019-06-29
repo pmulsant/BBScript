@@ -1,0 +1,5 @@
+a = new MyObject(){
+    this.attr;
+};
+$b.attr = 0.2;
+a.equals(b);

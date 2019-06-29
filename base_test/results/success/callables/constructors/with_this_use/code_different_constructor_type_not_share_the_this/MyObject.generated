@@ -1,0 +1,9 @@
+class MyObject {
+	int attr;
+	
+	MyObject() {
+		this.attr = 2;
+		new MyObject2();
+	}
+	
+}

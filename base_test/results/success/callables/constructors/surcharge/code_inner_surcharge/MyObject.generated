@@ -1,0 +1,11 @@
+class MyObject {
+	MyObject() {
+		int value;
+		value = 2;
+		new MyObject(value);
+	}
+	
+	MyObject(int value) {
+	}
+	
+}

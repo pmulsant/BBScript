@@ -1,0 +1,8 @@
+class MyObject {
+	float attr;
+	
+	MyObject() {
+		this.attr;
+	}
+	
+}

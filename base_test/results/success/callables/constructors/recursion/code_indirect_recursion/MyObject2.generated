@@ -1,0 +1,6 @@
+class MyObject2 {
+	MyObject2() {
+		new MyObject();
+	}
+	
+}

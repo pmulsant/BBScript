@@ -8,8 +8,8 @@ import com.code.generation.tests.run.BaseTestModifier;
 import java.io.IOException;
 
 public class TestSaver {
-    private static final String PREFIX = "success/fusion_object/with_attributes";
-    private static final String CODE_NAME = "two_attribute_defined_of_different_object_of_same_type";
+    private static final String PREFIX = "success/callables/methods/recursion";
+    private static final String CODE_NAME = "simple_recursion";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});

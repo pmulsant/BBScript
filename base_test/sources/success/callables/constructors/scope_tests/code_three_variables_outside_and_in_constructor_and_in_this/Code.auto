@@ -1,0 +1,5 @@
+a = 2;
+new MyObject(){
+    a = /a/;
+    this.a = "ok";
+};

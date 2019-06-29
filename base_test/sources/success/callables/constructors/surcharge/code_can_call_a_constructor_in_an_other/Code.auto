@@ -1,0 +1,6 @@
+new MyObject(){
+
+};
+new MyObject($value<int> as value){
+    new MyObject();
+};

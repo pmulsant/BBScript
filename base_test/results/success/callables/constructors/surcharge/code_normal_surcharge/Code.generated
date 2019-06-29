@@ -1,0 +1,3 @@
+new MyObject();
+int $value;
+new MyObject($value);

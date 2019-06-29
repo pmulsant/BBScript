@@ -1,0 +1,9 @@
+class MyObject {
+	MyObject() {
+	}
+	
+	MyObject(int value) {
+		new MyObject();
+	}
+	
+}

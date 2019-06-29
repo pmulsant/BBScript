@@ -1,0 +1,3 @@
+new MyObject(){
+    $value = 0.5;
+};

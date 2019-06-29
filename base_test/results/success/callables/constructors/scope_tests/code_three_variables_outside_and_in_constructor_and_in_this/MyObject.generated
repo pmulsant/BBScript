@@ -1,0 +1,10 @@
+class MyObject {
+	String a;
+	
+	MyObject() {
+		Regex a;
+		a = /a/;
+		this.a = "ok";
+	}
+	
+}

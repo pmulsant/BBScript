@@ -1,0 +1,5 @@
+new MyObject(){
+    value = 2;
+    new MyObject(value as value){
+    };
+};

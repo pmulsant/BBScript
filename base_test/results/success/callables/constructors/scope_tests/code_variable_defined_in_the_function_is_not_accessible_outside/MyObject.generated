@@ -1,0 +1,7 @@
+class MyObject {
+	MyObject() {
+		int a;
+		a = 2;
+	}
+	
+}

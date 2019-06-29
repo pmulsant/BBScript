@@ -1,0 +1,6 @@
+new MyObject(){
+    this.attr = 5;
+};
+new MyObject($value<int> as value){
+    this.attr = 0.5;
+};
