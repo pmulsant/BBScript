@@ -8,8 +8,8 @@ import com.code.generation.tests.run.BaseTestModifier;
 import java.io.IOException;
 
 public class TestSaver {
-    private static final String PREFIX = "failed/can_alter_standard_variables";
-    private static final String CODE_NAME = "cant_define_a_constructor";
+    private static final String PREFIX = "success/multi_process";
+    private static final String CODE_NAME = "share_functions";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});

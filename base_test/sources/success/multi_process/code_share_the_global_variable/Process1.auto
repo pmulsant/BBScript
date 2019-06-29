@@ -1,0 +1,2 @@
+global.attr = 5;
+global.method();

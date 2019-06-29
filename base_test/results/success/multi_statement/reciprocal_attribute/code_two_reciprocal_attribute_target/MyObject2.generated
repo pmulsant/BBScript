@@ -1,0 +1,8 @@
+class MyObject2 {
+	MyObject obj;
+	
+	MyObject2(MyObject arg) {
+		this.obj = arg;
+	}
+	
+}

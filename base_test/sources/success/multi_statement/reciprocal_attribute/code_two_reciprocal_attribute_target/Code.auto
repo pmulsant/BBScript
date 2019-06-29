@@ -1,0 +1,7 @@
+new MyObject(){
+    this.obj = this;
+    this.obj2 = new MyObject2(this);
+};
+new MyObject2($myObj as arg){
+    this.obj = arg;
+};

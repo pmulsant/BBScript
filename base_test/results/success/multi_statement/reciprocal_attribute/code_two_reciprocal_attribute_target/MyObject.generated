@@ -1,0 +1,10 @@
+class MyObject {
+	MyObject obj;
+	MyObject2 obj2;
+	
+	MyObject() {
+		this.obj = this;
+		this.obj2 = new MyObject2(this);
+	}
+	
+}

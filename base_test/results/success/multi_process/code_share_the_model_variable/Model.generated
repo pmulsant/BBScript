@@ -1,0 +1,7 @@
+class Model {
+	int attr;
+	
+	void method() {
+	}
+	
+}

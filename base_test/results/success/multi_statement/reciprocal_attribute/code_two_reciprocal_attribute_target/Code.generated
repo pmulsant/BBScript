@@ -1,0 +1,3 @@
+new MyObject();
+MyObject $myObj;
+new MyObject2($myObj);

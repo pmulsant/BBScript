@@ -1,0 +1,2 @@
+model.attr = 5;
+model.method();
