@@ -1,0 +1,12 @@
+class MyObject {
+	MyObject() {
+		MyObject a;
+		a = this;
+		a.method();
+	}
+	
+	void method() {
+		this.method();
+	}
+	
+}

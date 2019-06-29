@@ -50,8 +50,6 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
     private CustomType stringType;
     private CustomType regexType;
 
-    private Map<GrammarParser.LambdaExprContext, Lambda> lambdas = new IdentityHashMap<>();
-
     private AccessibleTopContext<LambdaType> expectedLambdaContext = new AccessibleTopContext<>();
     private AccessibleTopContext<ICallable> callableContext = new AccessibleTopContext<>();
 
@@ -251,7 +249,8 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
         } else {
             callableDefinition = new CallableDefinition(this, ctx.lambdaProcess().runnableScope());
         }
-        lambdas.put(ctx, expectedLambdaType.buildLambda(this, callableDefinition, ctx.lambdaArg()));
+        expectedLambdaType.buildLambda(this,
+                callableDefinition, ctx.lambdaArg()); // will visit lambda callable definition
         return new ExpressionResult(expectedLambdaType, resultMap, ctx);
     }
 
@@ -367,7 +366,7 @@ public class TypeCheckerVisitor extends GrammarBaseVisitor<Result> {
 
     @Override
     public Result visitReturnStat(GrammarParser.ReturnStatContext ctx) {
-        if (callableContext.getCurrentContext() == null) {
+        if (callableContext.getCurrentContext() == null && expectedLambdaContext.getCurrentContext() == null) {
             throw new IllegalStateException("can't use return here");
         }
         CanAppearInReturnStat canAppearInReturnStat = null;

@@ -1,0 +1,10 @@
+class MyObject {
+	MyObject() {
+		this.method();
+	}
+	
+	void method() {
+		this.method();
+	}
+	
+}

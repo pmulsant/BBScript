@@ -1,0 +1,4 @@
+List<boolean> $list;
+$list.filter(item -> {
+	return item;
+{);

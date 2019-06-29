@@ -1,0 +1,6 @@
+new MyObject(){
+    a = this;
+    a.method(){
+        this.method();
+    };
+};

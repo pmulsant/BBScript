@@ -8,8 +8,8 @@ import com.code.generation.tests.run.BaseTestModifier;
 import java.io.IOException;
 
 public class TestSaver {
-    private static final String PREFIX = "failed/simple_statement/this_use";
-    private static final String CODE_NAME = "cant_use_this_outside_object_even_in_constructor_parameter";
+    private static final String PREFIX = "success/callables/lambdas/block_lambda";
+    private static final String CODE_NAME = "one_statement_lambda";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});
