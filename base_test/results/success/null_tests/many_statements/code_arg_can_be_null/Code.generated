@@ -1,0 +1,3 @@
+MyObject a;
+a = new MyObject();
+a.method(1);

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class TestSaver {
     private static final String PREFIX = "success/null_tests/many_statements";
-    private static final String CODE_NAME = "add_a_float_variable_which_can_be_null_with_an_int";
+    private static final String CODE_NAME = "arg_can_be_null";
 
     public static void main(String[] args) throws WrongPasswordException, WrongArgsException, WrongArgNumberException, IOException {
         BaseTestModifier.main(new String[]{"add", PREFIX, CODE_NAME});

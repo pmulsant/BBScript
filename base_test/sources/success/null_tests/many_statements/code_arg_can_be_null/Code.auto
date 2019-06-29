@@ -1,0 +1,5 @@
+a = new MyObject(){
+    this.method(null as arg){
+    };
+};
+a.method(1);

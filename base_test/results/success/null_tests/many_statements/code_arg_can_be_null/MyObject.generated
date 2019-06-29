@@ -1,0 +1,9 @@
+class MyObject {
+	MyObject() {
+		this.method(null);
+	}
+	
+	void method(int arg) {
+	}
+	
+}

@@ -1,0 +1,4 @@
+new MyObject(){
+    this.method(null as arg){
+    };
+};
