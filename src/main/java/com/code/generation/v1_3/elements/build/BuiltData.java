@@ -34,4 +34,16 @@ public class BuiltData {
         }
         codeDirectory.write();
     }
+
+    public StrongTypeDirectory getStrongTypeDirectory() {
+        return strongTypeDirectory;
+    }
+
+    public Map<ParserRuleContext, Result> getResultMap() {
+        return resultMap;
+    }
+
+    public List<Code> getCodes() {
+        return codes;
+    }
 }
